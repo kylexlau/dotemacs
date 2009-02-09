@@ -1,4 +1,6 @@
 ;;; .emacs --- my dot emacs file
+;;; TODO
+;;  using emacs daemon
 ;;; basic setting
 (require 'cl)
 (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
@@ -6,12 +8,33 @@
 	   (default-directory my-lisp-dir))
       (setq load-path (cons my-lisp-dir load-path))
       (normal-top-level-add-subdirs-to-load-path)))
+
+(defvar elisp-d (expand-file-name "~/emacs/elisp")
+  "Elisp(single file) directory. Put in version control.")
+
+(add-to-list 'load-path elisp-d)
+
 (setq Info-default-directory-list
       (cons (expand-file-name "~/.info")
 	    Info-default-directory-list))
-(setq custom-file "~/prj/emacs/ini/customize.el")
+
+(setq custom-file (concat elisp-d "/cus.el"))
+
 (server-start)
 ;;; emacs daemon
+(defun k-emd()
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (setq x-select-enable-clipboard t)
+)
+
+(add-hook 'after-make-frame-functions
+          (lambda (frame)
+            (with-selected-frame frame
+              (when window-system
+		(k-emd)))))
+
 ;;; color theme
 (require 'color-theme)
 (color-theme-initialize)
@@ -19,37 +42,26 @@
 ;;; ui
 (setq inhibit-startup-message t)
 
-;; toolbox and menu
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
+;; get rid of bars
+(when window-system
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1))
 
 ;; scrool-bar
 ;;(set-scroll-bar-mode 'right)
 ;;(modify-frame-parameters nil '((scroll-bar-width . 8)))
 
-;; frame title name
 (setq frame-title-format '("Emacs@%b " (buffer-file-name ("("buffer-file-name")"))))
 
 ;; mouse action
 (mouse-avoidance-mode 'jump)
-
-;; font lock
 (global-font-lock-mode t)
-
-;; parent
 (show-paren-mode t)
 (setq show-paren-style 'parenthesis)
 (setq show-paren-delay 0.1)
-
-;; cursor
 (blink-cursor-mode -1)
 (setq cursor-in-echo-area nil)
-
-;; mouse
-(mouse-avoidance-mode 'animate)
-
-;; mode line
 (setq line-number-mode t)   ; Put line number in display
 (setq column-number-mode t) ; Put column number in display
 
@@ -58,18 +70,21 @@
 (setq display-time-24hr-format t)
 (setq display-time-day-and-date t)
 (display-time-mode 1)
-
-;; showo trailing witespace
 (setq-default show-trailing-whitespace t)
+
+(modify-frame-parameters (selected-frame)
+			 '((alpha . 90)))
 
 ;;; font
 ;;(set-default-font "Bitstream Vera Sans Mono-10")
 ;;(set-default-font "Consolas-11")
 ;;(set-default-font "Monaco-11")
+;;(set-default-font "Inconsolata")
 (set-default-font "Courier-11")
 (add-to-list 'default-frame-alist '(font . "Courier-11"))
 
 ;;; user pref
+
 (fset 'yes-or-no-p 'y-or-n-p)
 (auto-save-mode 1)
 (setq auto-save-interval 30)
@@ -86,28 +101,38 @@
 ;;(setq next-line-add-newlines nil)
 (setq default-major-mode 'text-mode)
 (setq enable-recursive-minibuffers t)
-;; enable those functions
+
+;;; backup/autosave
+(defvar backup-dir (expand-file-name "~/.emacs.d/backup/"))
+(defvar autosave-dir (expand-file-name "~/.emacs.d/autosave/"))
+(setq backup-directory-alist (list (cons ".*" backup-dir)))
+(setq auto-save-list-file-prefix autosave-dir)
+(setq auto-save-file-name-transforms `((".*" ,autosave-dir t)))
+
+;;; enable those functions
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
+(put 'capitalize-region 'disabled nil)
+
 (put 'set-goal-column 'disabled nil)
+(put 'scroll-left 'disabled nil)
+(put 'eval-expression 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
+(put 'dired-find-alternate-file 'disabled nil)
+
 ;;; keybinding
-(global-set-key "\C-c\C-m" 'execute-extended-command)
-(global-set-key "\C-x\C-m" 'execute-extended-command)
-(global-set-key "\C-xm" 'execute-extended-command)
-(global-set-key "\C-w" 'backward-kill-word)
-(global-set-key "\C-x\C-k" 'kill-region)
-(global-set-key (kbd "<home>") 'beginning-of-buffer)
-(global-set-key (kbd "<end>") 'end-of-buffer)
-(global-set-key (kbd "C-c C-q") 'fill-paragraph)
-(global-set-key "\C-cq" 'k-unfill-paragraph)
-(global-set-key "\C-c;" 'k-comment-dwim)
-(global-set-key (kbd "C-c m") 'k-goto-minibuffer)
-(global-set-key [f11] 'k-fullscreen)
-(global-set-key [f2] 'toggle-viper-mode)
-(global-set-key (kbd "C-x C-r") 'find-file-root)
-(global-set-key (kbd "M-p") 'beginning-of-buffer)
-(global-set-key (kbd "M-n") 'end-of-buffer)
+;(global-set-key "\C-x\C-m" 'execute-extended-command)
+(global-set-key "\C-xm" 'set-mark-command)
+(global-set-key	"\C-w"  'backward-kill-word)
+(global-set-key	"\C-x\C-k" 'kill-region)
+(global-set-key	"\C-c\C-q" 'fill-paragraph)
+(global-set-key	"\M-p" 'beginning-of-buffer)
+(global-set-key	"\M-n" 'end-of-buffer)
+(global-set-key	[home] 'beginning-of-buffer)
+(global-set-key	[end] 'end-of-buffer)
+;(global-set-key "\C-cq" 'k-unfill-paragraph)
+(global-set-key	"\C-c;" 'k-comment-dwim)
+(global-set-key	[f11] 'k-fullscreen)
 
 ;;; buffers
 (require 'ibuffer)
@@ -183,7 +208,7 @@
   (define-key c-mode-map (kbd "C-c C-r") 'compile)
   (define-key c-mode-map (kbd "C-x M-g") 'gdb)
   (interactive)
-  (c-turn-on-eldoc-mode)
+;  (c-turn-on-eldoc-mode)
   (c-set-style "K&R")
   (setq c-basic-offset 2)
   (c-toggle-auto-newline 1)
@@ -195,7 +220,7 @@
 
 (add-hook 'c-mode-hook 'my-c-mode)
 
-(load-file "elisp/google-c-style.el")
+(load "google-c-style.el")
 (add-hook 'c-mode-common-hook 'google-set-c-style)
 (add-hook 'c-mode-common-hook 'google-make-newline-indent)
 
@@ -204,7 +229,7 @@
 (require 'slime)
 (slime-setup)
 ;;; stumwm mode
-(load-file "elisp/stumpwm-mode.el")
+(load "stumpwm-mode.el")
 ;;; sawfish mode
 (autoload 'sawfish-mode "sawfish" "sawfish-mode" t)
 (setq auto-mode-alist (cons '("\\.sawfishrc$"  . sawfish-mode) auto-mode-alist)
@@ -212,7 +237,7 @@
       auto-mode-alist (cons '("\\.sawfish/rc$" . sawfish-mode) auto-mode-alist))
 
 ;;; sdcv mode
-(load-file "elisp/sdcv-mode.el")
+(load "sdcv-mode.el")
 (global-set-key (kbd "C-c d") 'sdcv-search)
 ;;; elisp lib
 (defvar switch-major-mode-history nil)
@@ -354,10 +379,6 @@
    nil 0 nil "_NET_WM_STATE" 32
    '(1 "_NET_WM_STATE_MAXIMIZED_VERT" 0)))
 
-
-;;; local variable
-;; -*- mode: outline-minor-mode; -*-
-
-;;; .emacs ends here
-
-
+;;; Local Variables:
+;;; mode:outline-minor
+;;; End:
