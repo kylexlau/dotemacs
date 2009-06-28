@@ -56,6 +56,20 @@
 (add-to-list 'load-path "~/.emacs.d/ecb")
 (add-to-list 'load-path "~/.emacs.d/auto-install")
 
+;;; emacs daemon
+(defun k-emd()
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (setq x-select-enable-clipboard t)
+)
+
+(add-hook 'after-make-frame-functions
+          (lambda (frame)
+            (with-selected-frame frame
+              (when window-system
+		(k-emd)))))
+;;; Mac OS X
 ;; Some variables to determine Operating System
 (defvar ntp (string= "windows-nt" (symbol-name system-type))
   "If Emacs runs on a Windows system.")
@@ -66,7 +80,6 @@
 (defvar macosp (string= "darwin" (symbol-name system-type))
   "If Emacs runs on a Mac OS system.")
 
-;;; Mac OS X
 (when macosp
   (progn
     (setq mac-command-modifier 'meta)
