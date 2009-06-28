@@ -1,26 +1,6 @@
 ;;; my dotemacs file
 ;; by Kyle x lau (www.xlau.org)
 
-;;; Changelogs:
-
-;; <2009-06-18 Thu 18:00>  add mac os x specific settings
-;;                         add macosp variable
-;; <2009-06-19 Fri 15:00>  add remember template for words
-;; <2009-06-21 Sun 02:00>  add remember template for TODO and Diary
-;;                         add org-agenda-files varibale setting
-;; <2009-06-22 Mon 14:00>  add Chinese font setting
-;; <2009-06-24 Wed 11:30>  add yasnippet
-;;                         make load path setting shorter by (progn ...)
-;; <2009-06-24 Wed 12:00>  add auto-complete-mode
-;; <2009-06-25 Thu 12:30>  add (column-number-mode 1)
-;; <2009-06-25 Thu 17:00>  add cedet and erb
-;;                         add font configurations for new frame
-;; <2009-06-26 Fri 13:00>  add anything
-;;                         add auto-install
-;;                         add more remember templates
-;; <2009-06-26 Fri 14:40>  add twit.el
-;; <2009-06-27 Sat 10:00>  delete tinypair and pabbrev
-
 ;;; Commentary:
 
 ;; TODO: using emacs --daemon to start emacs.
@@ -175,6 +155,24 @@
 (define-key outline-minor-mode-map (kbd "<tab>") 'org-cycle)
 (define-key outline-minor-mode-map (kbd "\C-u <tab>") 'org-shifttab)
 (add-hook 'emacs-lisp-mode-hook 'outline-minor-mode)
+
+;; enables outlining for ruby
+(add-hook 'ruby-mode-hook
+	  '(lambda ()
+	     (outline-minor-mode)
+	     (setq outline-regexp " *\\(def \\|class\\|module\\)")))
+
+(add-hook 'php-mode-user-hook
+	  '(lambda ()
+	     (outline-minor-mode)
+	     (setq outline-regexp " *\\(private funct\\|public funct\\|funct\\|class\\|#head\\)")
+	     (hide-sublevels 1)))
+
+(add-hook 'python-mode-hook
+	  '(lambda ()
+	     (outline-minor-mode)
+	     (setq outline-regexp " *\\(def \\|clas\\|#hea\\)")
+	     (hide-sublevels 1)))
 
 ;;; org-mode
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
