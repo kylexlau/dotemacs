@@ -56,6 +56,7 @@
 (add-to-list 'load-path "~/.emacs.d/ecb")
 (add-to-list 'load-path "~/.emacs.d/auto-install")
 
+<<<<<<< HEAD:.emacs
 ;;; emacs daemon
 (defun k-emd()
 ;  (menu-bar-mode -1)
@@ -70,6 +71,8 @@
               (when window-system
 		(k-emd)))))
 ;;; Mac OS X
+=======
+>>>>>>> 5e7c1fc... add emacs daemon setting:.emacs
 ;; Some variables to determine Operating System
 (defvar ntp (string= "windows-nt" (symbol-name system-type))
   "If Emacs runs on a Windows system.")
@@ -80,6 +83,7 @@
 (defvar macosp (string= "darwin" (symbol-name system-type))
   "If Emacs runs on a Mac OS system.")
 
+;;; Mac OS X
 (when macosp
   (progn
     (setq mac-command-modifier 'meta)
