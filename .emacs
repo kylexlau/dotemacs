@@ -156,21 +156,21 @@
 (define-key outline-minor-mode-map (kbd "\C-u <tab>") 'org-shifttab)
 (add-hook 'emacs-lisp-mode-hook 'outline-minor-mode)
 
-;; enables outlining for ruby
 (add-hook 'ruby-mode-hook
 	  '(lambda ()
-	     (outline-minor-mode)
-	     (setq outline-regexp " *\\(def \\|class\\|module\\)")))
+	     (outline-minor-mode 1)
+	     (setq outline-regexp " *\\(def \\|class\\|module\\)")
+	     (hide-sublevels 1)))
 
-(add-hook 'php-mode-user-hook
+(add-hook 'php-mode-hook
 	  '(lambda ()
-	     (outline-minor-mode)
+	     (outline-minor-mode 1)
 	     (setq outline-regexp " *\\(private funct\\|public funct\\|funct\\|class\\|#head\\)")
 	     (hide-sublevels 1)))
 
 (add-hook 'python-mode-hook
 	  '(lambda ()
-	     (outline-minor-mode)
+	     (outline-minor-mode 1)
 	     (setq outline-regexp " *\\(def \\|clas\\|#hea\\)")
 	     (hide-sublevels 1)))
 
