@@ -1,372 +1,301 @@
-;;; my dotemacs file
-;; by Kyle x lau (www.xlau.org)
+;;; keybinding
+(global-set-key (kbd "C-=") 'hippie-expand)
 
-;;; Commentary:
+;;; k/func
+(defun k/func()
+  (interactive)
+  (k/init)
+  (k/ui)
+;  (k/colth)
+  (k/macos)
+  (k/out)
+  (k/org)
+  (k/file)
 
-;; TODO: using emacs --daemon to start emacs.
+  (k/web)
+  (k/yas)
+  (when ntp (k/full))
+)
 
-;; Syntax highlighting: font-lock-mode, global-font-lock-mode
+;;; built in
+(defun k/init()
+  " init my configuration. "
+  ;; server
+  (server-start)
 
-;; Folding: outline-mode, outline-minor-mode
+  ;; load path
+  (add-to-list 'load-path "~/.emacs.d/elisp")
+  (progn (cd "~/.emacs.d/elisp")
+	 (normal-top-level-add-subdirs-to-load-path))
 
-;; go-to-symbol(Textmate)
-;; that's a quite useful feature
-;; list all the symbol, goto some symbol
+  ;; variable for system type
+  (defvar ntp (string= "windows-nt" (symbol-name system-type))
+    "If Emacs runs on a Windows system.")
 
-;; Auto completion: yasnippet, auto-complete
-;; Snippets.
+  (defvar linuxp (string= "gnu/linux" (symbol-name system-type))
+    "If Emacs runs on a Linux system.")
 
-;; Project management: file and buffer, anything, speedbar
-
-;; GTD
-;; org-mode, remember-mode, planner-mode, muse-mode and more
-
-;;; load path
-;; server
-(server-start)
-
-(add-to-list 'load-path "~/.emacs.d/elisp")
-(progn (cd "~/.emacs.d/elisp")
-       (normal-top-level-add-subdirs-to-load-path))
-
-;; cedet and ecb load-path
-(add-to-list 'load-path "~/.emacs.d/cedet")
-(progn (cd "~/.emacs.d/cedet")
-       (normal-top-level-add-subdirs-to-load-path))
-(add-to-list 'load-path "~/.emacs.d/ecb")
-(add-to-list 'load-path "~/.emacs.d/auto-install")
-
-;; Some variables to determine Operating System
-(defvar ntp (string= "windows-nt" (symbol-name system-type))
-  "If Emacs runs on a Windows system.")
-
-(defvar linuxp (string= "gnu/linux" (symbol-name system-type))
-  "If Emacs runs on a Linux system.")
-
-(defvar macosp (string= "darwin" (symbol-name system-type))
-  "If Emacs runs on a Mac OS system.")
-
-;;; Mac OS X
-(when macosp
-  (progn
-    (setq mac-command-modifier 'meta)
-    (setq mac-option-modifier 'super)
-    ;; Mac Open/Execute from dired
-    (require 'dired-x)
-    (define-key dired-mode-map "w"
-      (function
-       (lambda ()
-	 (interactive)
-	 (shell-command (concat "/usr/bin/open " (dired-get-filename)))))))
+  (defvar macosp (string= "darwin" (symbol-name system-type))
+    "If Emacs runs on a Mac OS system.")
   )
 
-;; auto save
-(setq auto-save-interval 60)
+(defun k/macos()
+  " Mac OS related configuration. "
+  (interactive)
+  (when macosp
+    (progn
+      (setq mac-command-modifier 'meta)
+      (setq mac-option-modifier 'super)
+      ;; Mac Open/Execute from dired
+      (require 'dired-x)
+      (define-key dired-mode-map "w"
+	(function
+	 (lambda ()
+	   (interactive)
+	   (shell-command (concat "/usr/bin/open " (dired-get-filename)))))))
+    ))
 
-;;; basic
-;; backup file
-(setq backup-by-copying t)
-(setq backup-directory-alist
-      (list (cons "." "~/.emacs.d/backup")))
+(defun k/key()
+  "key bindings"
+  (interactive)
+  (define-key map (kbd "C-=") 'hippie-expand)
+)
+(defun k/ui()
+  " ui related configuration. "
+  (interactive)
+  ;; bars
+  (when window-system
+    (when (not macosp) (menu-bar-mode -1))
+    (tool-bar-mode -1)
+    (scroll-bar-mode -1)
+    )
 
-;; ui option
-;;font
-;(set-frame-font "Monaco-14")
-;(set-frame-font "Droid Sans Mono-14")
-; for emacs --daemon
-(defun for-emacs-daemon()
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
+  ;; font
   (set-frame-font "Courier New-14")
   (set-fontset-font (frame-parameter nil 'font)
-		    'han '("STsong" . "unicode-bmp"))
+		    'han '("STSong" . "unicode-bmp"))
   (setq default-frame-alist
 	'(
 	  ;;(top . 0) (left . 0)
 	  (width . 80) (height . 40)
 	  (font . "Courier New-14")))
-  )
 
-(for-emacs-daemon)
+  ;; encoding
+  (prefer-coding-system 'utf-8)
 
-;; encoding
-(prefer-coding-system 'utf-8)
-(require 'unicad)
-
-; get rid of bars
-(when window-system
-  (when (not macosp) (menu-bar-mode -1))
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
-  )
-
-;; scrool-bar
-;(set-scroll-bar-mode 'right)
-;(modify-frame-parameters nil '((scroll-bar-width . 8)))
-
-;; title
-(setq frame-title-format
+  ;; frame title
+  (setq frame-title-format
       '("Emacs@%b " (buffer-file-name ("("buffer-file-name")"))))
 
-;; display time on modeline
-;(setq display-time-mode t)
-;(setq display-time-24hr-format t)
-;(setq display-time-day-and-date t)
+  (column-number-mode 1)
+  (setq show-trailing-whitespace t)
 
-;; column number
-(column-number-mode 1)
-(setq show-trailing-whitespace t)
+  ;; transparency
+  (modify-frame-parameters (selected-frame)
+			   '((alpha . 90)))
 
-;; transparency
-(modify-frame-parameters (selected-frame)
-			 '((alpha . 90)))
+  ;; minor modes
+  (show-paren-mode 1)
+  (auto-image-file-mode 1)
+  (transient-mark-mode 1)
 
-;; disabled function
-(put 'narrow-to-region 'disabled nil)
+  ;; font lock
+  (global-font-lock-mode 1)
+  (setq font-lock-maximum-decoration t)
 
-;; settings
-(show-paren-mode 1)
-(auto-image-file-mode 1)
-(transient-mark-mode t)
-(setq debug-on-error t)
-(setq query-replace-highlight t)
-(setq search-highlight t)
-(setq font-lock-maximum-decoration t)
-(setq python-indent 2)
+  ;; search
+  (setq query-replace-highlight t)
+  (setq search-highlight t)
 
-;; yes/no to y/n
-(fset 'yes-or-no-p 'y-or-n-p)
-(set-variable 'confirm-kill-emacs 'yes-or-no-p)
+  ;; debug
+  (setq debug-on-error t)
 
-;; Global Keybindings
-(global-set-key [\C-f12] 'speedbar)
-
-;;; Folding
-(require 'outline)
-(define-key outline-minor-mode-map (kbd "<tab>") 'org-cycle)
-(define-key outline-minor-mode-map (kbd "\C-u <tab>") 'org-shifttab)
-(add-hook 'emacs-lisp-mode-hook 'outline-minor-mode)
-
-(add-hook 'ruby-mode-hook
-	  '(lambda ()
-	     (outline-minor-mode 1)
-	     (setq outline-regexp " *\\(def \\|class\\|module\\)")
-	     (hide-sublevels 1)))
-
-(add-hook 'php-mode-hook
-	  '(lambda ()
-	     (outline-minor-mode 1)
-	     (setq outline-regexp " *\\(private funct\\|public funct\\|funct\\|class\\|#head\\)")
-	     (hide-sublevels 1)))
-
-(add-hook 'python-mode-hook
-	  '(lambda ()
-	     (outline-minor-mode 1)
-	     (setq outline-regexp " *\\(def \\|clas\\|#hea\\)")
-	     (hide-sublevels 1)))
-
-;;; org-mode
-(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
-(add-to-list 'auto-mode-alist '("\\.txt\\'" . org-mode))
-(add-hook 'org-mode-hook
-	  (lambda ()
-;	    (setq fill-column 72) ; default 70 is OK
-	    (auto-fill-mode 1)
-	    (flyspell-mode 0)  ; turn on will make typing slow on MacOSX
-	    (outline-minor-mode 1)
-	    (setq show-trailing-whitespace nil) ; don't need on org-mode
-	    ))
-
-(global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cb" 'org-iswitchb)
-(global-set-key "\C-cr" 'org-remember)
-
-;; clocking 
-(setq org-clock-persist t)
-(org-clock-persistence-insinuate)
-
-;; ipsell
-(when macosp
-  (setq ispell-program-name "/sw/bin/ispell"))
-
-;; remember
-(when macosp
-  (setq org-directory "~/Dropbox/gtd/")
-  (setq org-agenda-files (quote ("~/Dropbox/gtd/gtd.txt" "~/Dropbox/gtd/diary.txt")))
+  ;; yes/no to y/n
+  (fset 'yes-or-no-p 'y-or-n-p)
+  (set-variable 'confirm-kill-emacs 'yes-or-no-p)
   )
 
-(setq org-default-notes-file "~/.notes")
-(setq remember-annotation-functions '(org-remember-annotation))
-(setq remember-handler-functions '(org-remember-handler))
-(add-hook 'remember-mode-hook 'org-remember-apply-template)
 
-;; template
-(when macosp
-  (setq org-remember-templates
-	'(
-	  ("Diary" ?d "* %U %^{Headline} :DIARY: \n%?"  "~/Dropbox/gtd/diary.txt")
-	  ("Review" ?r "* %U Daily Review :DR: \n%[~/.daily_review.txt]\n" "~/Dropbox/gtd/diary.txt")
-	  ("Book" ?b "* %U %^{Title} :READING: \n%[~/.booktemp.txt]\n" "~/Dropbox/gtd/diary.txt")
- 	  ("Film" ?f "* %U %^{Title} :FILM: \n%[~/.film_temp.txt]\n" "~/Dropbox/gtd/diary.txt")
-	  ("Clipboard" ?c "* %U %^{Headline} %^g\n%c\n%?"  "~/Dropbox/gtd/diary.txt")
-	  ("Notes" ?n "* %U %^{Title} :NOTES \n %?" "~/Dropbox/gtd/diary.txt")
-	  ("TODO" ?t "** TODO %? \nAdded @ %T" "~/Dropbox/gtd/gtd.txt" "Tasks")
-	  ("Words" ?w "" "~/Dropbox/gtd/word.txt")
-	  )))
+(defun k/out()
+  "outline related."
+  (interactive)
 
-;;; modes
-(require 'color-theme)
-(load "color-theme-library.el")
-(color-theme-clarity)
-;(color-theme-wheat)
-;(load "color-theme-colorful-obsolescence")
-;(color-theme-colorful-obsolescence)
+  (require 'outline)
 
-;; utility
+  (define-key outline-minor-mode-map (kbd "<tab>") 'org-cycle)
+  (define-key outline-minor-mode-map (kbd "\C-u <tab>") 'org-shifttab)
 
-;; TODO: I should find a better pair utility replace
-;; this ugly one.
-;; (require 'tinypair)
-;; (tinypair-pair-type-select)
+  (add-hook 'emacs-lisp-mode-hook 'outline-minor-mode)
 
-;; auto-complete is better for this purpose
-;; (require 'pabbrev)
+  (add-hook 'ruby-mode-hook
+	    '(lambda ()
+	       (outline-minor-mode 1)
+	       (setq outline-regexp " *\\(def \\|class\\|module\\)")
+	       (hide-sublevels 1)))
 
-;(require 'setnu)
+  (add-hook 'php-mode-hook
+	    '(lambda ()
+	       (outline-minor-mode 1)
+	       (setq outline-regexp " *\\(private funct\\|public funct\\|funct\\|class\\|#head\\)")
+	       (hide-sublevels 1)))
 
-;;; buffer and file
-(require 'ibuffer)
-(global-set-key (kbd "C-c C-b") 'ibuffer)
-(require 'bs)
-(global-set-key (kbd "C-x C-b") 'bs-show)
-(require 'ido)
-(ido-mode 'buffer)
+  (add-hook 'python-mode-hook
+	    '(lambda ()
+	       (outline-minor-mode 1)
+	       (setq outline-regexp " *\\(def \\|clas\\|#hea\\)")
+	       (hide-sublevels 1)))
+  )
 
-;; desktop
-(require 'desktop)
-(desktop-save-mode 1)
-(setq desktop-restore-eager 50)
-
-;; recentf
-(require 'recentf)
-(setq recentf-mode t)
-
-;;; anything
-;(require 'anything-config)
-;(require 'anything-match-plugin)
-;(setq anything-sources
-;      (list anything-c-source-buffers
-;            anything-c-source-file-name-history
-;	    anything-c-source-files-in-current-dir
-;            anything-c-source-info-pages
-;            anything-c-source-man-pages
-;	    anything-c-source-file-cache
-;            anything-c-source-emacs-commands))
-;(global-set-key "\C-x\C-a" 'anything)
-
-;;; dired mode
-(require 'dired-x) ; OS X required it before
-(setq dired-recursive-copies 'top)
-(setq dired-recursive-deletes 'top)
-(setq dired-dwim-target t)
-(add-hook 'dired-mode-hook
-          (lambda ()
-            (setq dired-omit-files "^#\\|^\\..*")
-            (dired-omit-mode 1)))
-(setq dired-omit-extensions
-      '(".svn/" "CVS/" ".o" "~" ".bin" ".lbin" ".so" ".a" ".ln"
-
-        ".blg" ".bbl" ".elc" ".lof" ".glo" ".idx" ".lot" ".dvi"
-        ".fmt" ".tfm" ".class" ".fas" ".lib" ".mem" ".x86f"
-        ".sparcf" ".fasl" ".ufsl" ".fsl" ".dxl" ".pfsl" ".dfsl"
-        ".lo" ".la" ".gmo" ".mo" ".toc" ".aux" ".cp" ".fn" ".ky"
-        ".pg" ".tp" ".vr" ".cps" ".fns" ".kys" ".pgs" ".tps" ".vrs"
-        ".pyc" ".pyo" ".idx" ".lof" ".lot" ".glo" ".blg" ".bbl"
-        ".cp" ".cps" ".fn" ".fns" ".ky" ".kys" ".pg" ".pgs" ".tp"
-        ".tps" ".vr" ".vrs"))
-
-;;; auto complete
-;; auto-complete
-(when (require 'auto-complete nil t)
-  (require 'auto-complete-yasnippet)
-  (require 'auto-complete-emacs-lisp)
-  (require 'auto-complete-css)
-  (require 'auto-complete-python)
-
-  (global-auto-complete-mode t)
-
-  (define-key ac-complete-mode-map "\t" 'ac-expand)
-  (define-key ac-complete-mode-map "\r" 'ac-complete)
-  (define-key ac-complete-mode-map "\C-n" 'ac-next)
-  (define-key ac-complete-mode-map "\C-p" 'ac-previous)
-
-  (setq ac-auto-start 3)
-  (setq ac-dwim t)
-
-  (set-default 'ac-sources '(ac-source-yasnippet ac-source-abbrev ac-source-words-in-buffer))
-
-  (setq ac-modes
-      (append ac-modes
-	      '(eshell-mode org-mode html-mode)))
-
-;;(add-to-list 'ac-trigger-commands 'org-self-insert-command)
-
-  (add-hook 'emacs-lisp-mode-hook
+(defun k/org()
+  "org-mode related."
+  (interactive)
+  (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
+  (add-to-list 'auto-mode-alist '("\\.txt\\'" . org-mode))
+  (add-hook 'org-mode-hook
 	    (lambda ()
-	      (setq ac-sources
-		    '(ac-source-yasnippet ac-source-abbrev ac-source-words-in-buffer ac-source-symbols))))
+	      (auto-fill-mode 1)
+	      (flyspell-mode 0)  ; turn on will make typing slow on MacOSX
+	      (outline-minor-mode 1)
+	      (setq show-trailing-whitespace nil) ; don't need on org-mode
+	      ))
 
-  (add-hook 'eshell-mode-hook
+  (global-set-key "\C-cl" 'org-store-link)
+  (global-set-key "\C-ca" 'org-agenda)
+  (global-set-key "\C-cb" 'org-iswitchb)
+  (global-set-key "\C-cr" 'org-remember)
+
+  ;; clocking
+  (setq org-clock-persist t)
+  (org-clock-persistence-insinuate)
+
+  ;; remember
+  (when macosp
+    (setq org-directory "~/Dropbox/gtd/")
+    (setq org-agenda-files (quote ("~/Dropbox/gtd/gtd.txt" "~/Dropbox/gtd/diary.txt")))
+    )
+
+  (setq org-default-notes-file "~/.notes")
+  (setq remember-annotation-functions '(org-remember-annotation))
+  (setq remember-handler-functions '(org-remember-handler))
+  (add-hook 'remember-mode-hook 'org-remember-apply-template)
+
+  ;; template
+  (when macosp
+    (setq org-remember-templates
+	  '(
+	    ("Diary" ?d "* %U %? :DIARY: \n"  "~/Dropbox/gtd/diary.txt")
+	    ("Review" ?r "* %U Daily Review :DR: \n%[~/.daily_review.txt]\n" "~/Dropbox/gtd/diary.txt")
+	    ("Book" ?b "* %U %^{Title} :READING: \n%[~/.booktemp.txt]\n" "~/Dropbox/gtd/diary.txt")
+	    ("Film" ?f "* %U %^{Title} :FILM: \n%[~/.film_temp.txt]\n" "~/Dropbox/gtd/diary.txt")
+	    ("Clipboard" ?c "* %U %^{Headline} %^g\n%c\n%?"  "~/Dropbox/gtd/diary.txt")
+	    ("Notes" ?n "* %U %^{Title} :NOTES \n %?" "~/Dropbox/gtd/diary.txt")
+	    ("TODO" ?t "** TODO %? \nAdded @ %T" "~/Dropbox/gtd/gtd.txt" "Tasks")
+	    )))
+  )
+
+(defun k/file()
+  "file management."
+  (interactive)
+  
+  ;; backup
+  (setq backup-inhibited t)
+
+  ;; auto save
+  (setq auto-save-default nil)
+
+  ;; ido
+  (require 'ido)
+  (ido-mode 1)
+
+  ;; desktop
+  (require 'desktop)
+  (desktop-save-mode 1)
+  (setq desktop-restore-eager 50)
+
+  ;; dired
+  (require 'dired-x)
+  (setq dired-recursive-copies 'top)
+  (setq dired-recursive-deletes 'top)
+  (setq dired-dwim-target t)
+
+  ;; dired omit
+  (add-hook 'dired-mode-hook
 	    (lambda ()
-	      (setq ac-sources
-		    '(ac-source-yasnippet ac-source-abbrev ac-source-files-in-current-dir ac-source-words-in-buffer)))))
+	      (setq dired-omit-files "^#\\|^\\..*")
+	      (dired-omit-mode 1)))
+  (setq dired-omit-extensions
+	'(".svn/" "CVS/" ".o" "~" ".bin" ".lbin" ".so" ".a" ".ln"))
+  )
 
-;; (add-hook 'ruby-mode-hook
-;; 	    (lambda ()
-;; 	      (setq ac-omni-completion-sources '(("\\.\\=" ac-source-rcodetools))))))
+(defun k/full()
+  " full screen function for window."
+  (interactive)
+  (defvar my-fullscreen-p t "Check if fullscreen is on or off")
+  (defun my-non-fullscreen ()
+    (interactive)
+    (if (fboundp 'w32-send-sys-command)
+	;; WM_SYSCOMMAND restore #xf120
+	(w32-send-sys-command 61728)
+      (progn (set-frame-parameter nil 'width 82)
+	     (set-frame-parameter nil 'fullscreen 'fullheight))))
 
-;; Initialize Yasnippet
-;; Don't map TAB to yasnippet
-;; In fact, set it to something we'll never use because
-;; we'll only ever trigger it indirectly.
-(require 'yasnippet)
-(setq yas/trigger-key (kbd "C-c <kp-multiply>"))
-(yas/initialize)
-(yas/load-directory "~/.emacs.d/snippets")
+  (defun my-fullscreen ()
+    (interactive)
+    (if (fboundp 'w32-send-sys-command)
+	;; WM_SYSCOMMAND maximaze #xf030
+	(w32-send-sys-command 61488)
+      (set-frame-parameter nil 'fullscreen 'fullboth)))
 
-;;; auto install
-(require 'auto-install)
+  (defun my-toggle-fullscreen ()
+    (interactive)
+    (setq my-fullscreen-p (not my-fullscreen-p))
+    (if my-fullscreen-p
+	(my-non-fullscreen)
+      (my-fullscreen)))
 
-;;; web development
-;; nxhtml-mode, seems it's for Windows only.
-;(load "~/.emacs.d/nxhtml/autostart.el")
+  (global-set-key [f11] 'my-toggle-fullscreen)
+  )
 
-;; PHP Mode
-(autoload 'php-mode "php-mode")
-(add-to-list 'auto-mode-alist '("\\.php\\'" . php-mode))
 
-;; CSS Mode
-(autoload 'css-mode "css-mode")
-(add-to-list 'auto-mode-alist '("\\.css\\'" . css-mode))
-(setq css-indent-offset 2)
+;;; extensions
+(defun k/colth()
+  " color-theme. "
+  (interactive)
+  (require 'color-theme)
+  (load "color-theme-library.el")
+  (color-theme-clarity)
+)
+(defun k/web()
+  " web development. "
+  (interactive)
 
-;; Javascript Mode
-(autoload 'javascript-mode "javascript")
-(add-to-list 'auto-mode-alist '("\\.js$" . javascript-mode))
+  ;; php
+  (autoload 'php-mode "php-mode")
+  (add-to-list 'auto-mode-alist '("\\.php\\'" . php-mode))
 
-;;; cedet and ecb
-;(load "cedet.el")
-;(global-ede-mode 1)                      ; Enable the Project management system
-; (semantic-load-enable-code-helpers)      ; Enable prototype help and smart completion
-; (global-srecode-minor-mode 1)            ; Enable template insertion menu
-; (require 'ecb)
-;(require 'ecb-autoloads)
+  ;; CSS
+  (autoload 'css-mode "css-mode")
+  (add-to-list 'auto-mode-alist '("\\.css\\'" . css-mode))
+  (setq css-indent-offset 2)
 
-;;; twitter
-(require 'twit)
+  ;; Javascript
+  (autoload 'javascript-mode "javascript")
+  (add-to-list 'auto-mode-alist '("\\.js$" . javascript-mode))
 
-;; my lib
-(load "~/.emacs.d/mylib.el")
+  ;; markdown
+  (require 'markdown-mode)
+  )
 
-;;; .emacs file ends here.
+(defun k/yas()
+  " yasnippet. "
+  (interactive)
+  (require 'yasnippet)
+  (yas/initialize)
+  (yas/load-directory "~/.emacs.d/snippets")
+  )
+
+;;; start
+(k/func)
+
+;;; k.el ends here
+
