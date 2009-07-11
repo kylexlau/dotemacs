@@ -1,22 +1,6 @@
 ;;; keybinding
 (global-set-key (kbd "C-=") 'hippie-expand)
 
-;;; k/func
-(defun k/func()
-  (interactive)
-  (k/init)
-  (k/ui)
-  (k/cth)
-  (k/macos)
-  (k/out)
-  (k/org)
-  (k/file)
-
-  (k/web)
-  (k/yas)
-  (when ntp (k/full))
-)
-
 ;;; built in
 (defun k/init()
   " init my configuration. "
@@ -46,14 +30,30 @@
     (progn
       (setq mac-command-modifier 'meta)
       (setq mac-option-modifier 'super)
-      ;; Mac Open/Execute from dired
-      (require 'dired-x)
-      (define-key dired-mode-map "w"
-	(function
-	 (lambda ()
-	   (interactive)
-	   (shell-command (concat "/usr/bin/open " (dired-get-filename)))))))
-    ))
+    )))
+
+(defun k/dired()
+  (interactive)
+  (add-hook 'dired-load-hook
+	    (lambda ()
+	      ;; omit mode
+	      (require 'dired-x)
+	      (dired-omit-mode 1)
+	      (setq dired-omit-files "^#\\|^\\..*")  
+	      (setq dired-omit-extensions
+		    '(".svn/" "CVS/" ".o" "~" ".bin" ".lbin" ".so" ".a" ".ln"))
+
+	      (setq dired-guess-shell-gnutar "gtar")
+	      (setq dired-recursive-copies 'top)
+	      (setq dired-recursive-deletes 'top)
+	      (setq dired-dwim-target t)
+	      ))
+  (define-key dired-mode-map "w"
+    (function
+     (lambda ()
+       (interactive)
+       (shell-command (concat "/usr/bin/open " (dired-get-filename)))
+       ))))
 
 (defun k/key()
   "key bindings"
@@ -136,7 +136,7 @@
   (add-hook 'php-mode-hook
 	    '(lambda ()
 	       (outline-minor-mode 1)
-	       (setq outline-regexp " *\\(private funct\\|public funct\\|funct\\|class\\|#head\\)")
+	       (setq outline-regexp " *\\(private funct\\|public funct\\|funct\\|class\\|#head\\|/\\*\\*\\)")
 	       (hide-sublevels 1)))
 
   (add-hook 'python-mode-hook
@@ -212,19 +212,6 @@
   (desktop-save-mode 1)
   (setq desktop-restore-eager 50)
 
-  ;; dired
-  (require 'dired-x)
-  (setq dired-recursive-copies 'top)
-  (setq dired-recursive-deletes 'top)
-  (setq dired-dwim-target t)
-
-  ;; dired omit
-  (add-hook 'dired-mode-hook
-	    (lambda ()
-	      (setq dired-omit-files "^#\\|^\\..*")
-	      (dired-omit-mode 1)))
-  (setq dired-omit-extensions
-	'(".svn/" "CVS/" ".o" "~" ".bin" ".lbin" ".so" ".a" ".ln"))
   )
 
 (defun k/full()
@@ -265,6 +252,7 @@
   (load "color-theme-library.el")
   (color-theme-clarity)
 )
+
 (defun k/web()
   " web development. "
   (interactive)
@@ -293,6 +281,23 @@
   (yas/initialize)
   (yas/load-directory "~/.emacs.d/snippets")
   )
+
+;;; k/func
+(defun k/func()
+  (interactive)
+  (k/init)
+  (k/ui)
+  (k/cth)
+  (k/macos)
+  (k/out)
+  (k/org)
+  (k/file)
+  (k/dired)
+
+  (k/web)
+  (k/yas)
+  (when ntp (k/full))
+)
 
 ;;; start
 (k/func)
