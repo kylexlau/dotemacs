@@ -6,7 +6,7 @@
   (interactive)
   (k/init)
   (k/ui)
-;  (k/colth)
+  (k/cth)
   (k/macos)
   (k/out)
   (k/org)
@@ -258,7 +258,7 @@
 
 
 ;;; extensions
-(defun k/colth()
+(defun k/cth()
   " color-theme. "
   (interactive)
   (require 'color-theme)
@@ -298,4 +298,3 @@
 (k/func)
 
 ;;; k.el ends here
-
