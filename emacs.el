@@ -56,7 +56,8 @@
 
   ;; font
   (when macosp (set-frame-font "Courier New-14"))
-  (when linuxp (set-frame-font "Courier New-12"))
+;  (when linuxp (set-frame-font "Courier New-12"))
+  (when linuxp (set-frame-font "Bitstream Vera Sans Mono-12"))
 
   (when macosp
     (set-fontset-font (frame-parameter nil 'font)
