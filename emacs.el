@@ -56,7 +56,7 @@
 
   ;; font
   (when macosp (set-frame-font "Courier New-14"))
-;  (when linuxp (set-frame-font "Courier New-12"))
+  (when ntp (set-frame-font "Courier New-12"))
   (when linuxp (set-frame-font "Bitstream Vera Sans Mono-12"))
 
   (when macosp
@@ -223,7 +223,7 @@
   )
 
 
-;;; extensions
+;;; functions
 (defun k/full()
   " full screen function for window."
   (interactive)
@@ -265,12 +265,17 @@
   (global-set-key [f11] 'my-toggle-fullscreen)
   )
 
+(defun k/check-file(file)
+  "check if a file is in load-path."
+  (locate-file file load-path))
+;;; extensions
 (defun k/colth()
   " color-theme. "
   (interactive)
-  (require 'color-theme)
-  (load "color-theme-library.el")
-  (color-theme-clarity)
+  (when (k/check-file "color-theme.el")
+    (require 'color-theme)
+    (load "color-theme-library.el")
+    (color-theme-clarity))
 )
 (defun k/web()
   " web development. "
@@ -297,10 +302,11 @@
 (defun k/yas()
   " yasnippet. "
   (interactive)
-  (require 'yasnippet)
-  (yas/initialize)
-  (yas/load-directory "~/.emacs.d/snippets")
-  )
+  (when (k/check-file "yasnippet.el")
+    (require 'yasnippet)
+    (yas/initialize)
+    (yas/load-directory "~/.emacs.d/snippets")
+    )
 
 ;;; k/func
 (defun k/func()
