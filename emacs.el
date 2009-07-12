@@ -1,23 +1,7 @@
 ;;; keybinding
 (global-set-key (kbd "C-=") 'hippie-expand)
 
-;;; k/func
-(defun k/func()
-  (interactive)
-  (k/init)
-  (k/ui)
-;  (k/colth)
-  (k/macos)
-  (k/out)
-  (k/org)
-  (k/file)
-
-  (k/web)
-  (k/yas)
-  (when ntp (k/full))
-)
-
-;;; built in
+;;; built-ins
 (defun k/init()
   " init my configuration. "
   ;; server
@@ -317,7 +301,22 @@
   (yas/load-directory "~/.emacs.d/snippets")
   )
 
-;;; start
+;;; k/func
+(defun k/func()
+  (interactive)
+  (k/init)
+  (k/ui)
+  (k/colth)
+  (k/macos)
+  (k/out)
+  (k/org)
+  (k/file)
+
+  (k/full)
+  (k/web)
+  (k/yas)
+)
+
 (k/func)
 
 ;;; k.el ends here
