@@ -64,11 +64,12 @@
 		      'han '("WenQuanYi Zen Hei" . "unicode-bmp"))
     )
 
-  (setq default-frame-alist
-	'(
-	  ;;(top . 0) (left . 0)
-	  (width . 80) (height . 40)
-	  (font . "Courier New-14")))
+  (when macosp
+    (setq default-frame-alist
+	  '(
+	    ;;(top . 0) (left . 0)
+	    (width . 80) (height . 40)
+	    (font . "Courier New-14"))))
 
   ;; encoding
   (prefer-coding-system 'utf-8)
@@ -269,7 +270,7 @@
   (interactive)
   (when (k/check-file "color-theme.el")
     (require 'color-theme)
-    (load "color-theme-library.el")
+    (color-theme-initialize)
     (color-theme-clarity))
 )
 (defun k/web()
@@ -301,7 +302,7 @@
     (require 'yasnippet)
     (yas/initialize)
     (yas/load-directory "~/.emacs.d/snippets")
-    )
+    ))
 
 ;;; k/func
 (defun k/func()
@@ -322,4 +323,3 @@
 (k/func)
 
 ;;; k.el ends here
-
