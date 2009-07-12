@@ -227,37 +227,49 @@
 	'(".svn/" "CVS/" ".o" "~" ".bin" ".lbin" ".so" ".a" ".ln"))
   )
 
+
+;;; extensions
 (defun k/full()
   " full screen function for window."
   (interactive)
-  (defvar my-fullscreen-p t "Check if fullscreen is on or off")
-  (defun my-non-fullscreen ()
-    (interactive)
-    (if (fboundp 'w32-send-sys-command)
-	;; WM_SYSCOMMAND restore #xf120
-	(w32-send-sys-command 61728)
-      (progn (set-frame-parameter nil 'width 82)
-	     (set-frame-parameter nil 'fullscreen 'fullheight))))
 
-  (defun my-fullscreen ()
-    (interactive)
-    (if (fboundp 'w32-send-sys-command)
-	;; WM_SYSCOMMAND maximaze #xf030
-	(w32-send-sys-command 61488)
-      (set-frame-parameter nil 'fullscreen 'fullboth)))
+  (when ntp
+    (defvar my-fullscreen-p t "Check if fullscreen is on or off")
+    (defun my-non-fullscreen ()
+      (interactive)
+      (if (fboundp 'w32-send-sys-command)
+	  ;; WM_SYSCOMMAND restore #xf120
+	  (w32-send-sys-command 61728)
+	(progn (set-frame-parameter nil 'width 82)
+	       (set-frame-parameter nil 'fullscreen 'fullheight))))
 
-  (defun my-toggle-fullscreen ()
-    (interactive)
-    (setq my-fullscreen-p (not my-fullscreen-p))
-    (if my-fullscreen-p
-	(my-non-fullscreen)
-      (my-fullscreen)))
+    (defun my-fullscreen ()
+      (interactive)
+      (if (fboundp 'w32-send-sys-command)
+	  ;; WM_SYSCOMMAND maximaze #xf030
+	  (w32-send-sys-command 61488)
+	(set-frame-parameter nil 'fullscreen 'fullboth)))
+
+    (defun my-toggle-fullscreen ()
+      (interactive)
+      (setq my-fullscreen-p (not my-fullscreen-p))
+      (if my-fullscreen-p
+	  (my-non-fullscreen)
+	(my-fullscreen)))
+    )
+
+  (when linuxp
+    (defun my-toggle-fullscreen ()
+      "Full screen frame."
+      (interactive)
+      (x-send-client-message
+       nil 0 nil "_NET_WM_STATE" 32
+       '(2 "_NET_WM_STATE_FULLSCREEN" 0))
+      ))
 
   (global-set-key [f11] 'my-toggle-fullscreen)
   )
 
-
-;;; extensions
 (defun k/colth()
   " color-theme. "
   (interactive)
@@ -283,7 +295,8 @@
   (add-to-list 'auto-mode-alist '("\\.js$" . javascript-mode))
 
   ;; markdown
-  (require 'markdown-mode)
+  (autoload 'markdown-mode "markdown")
+  (add-to-list 'auto-mode-alist '("\\.text$" . markdown-mode))
   )
 
 (defun k/yas()
