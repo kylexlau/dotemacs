@@ -39,11 +39,6 @@
 	   (shell-command (concat "/usr/bin/open " (dired-get-filename)))))))
     ))
 
-(defun k/key()
-  "key bindings"
-  (interactive)
-  (define-key map (kbd "C-=") 'hippie-expand)
-)
 (defun k/ui()
   " ui related configuration. "
   (interactive)
