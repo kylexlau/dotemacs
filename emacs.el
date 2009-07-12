@@ -71,9 +71,19 @@
     )
 
   ;; font
-  (set-frame-font "Courier New-14")
-  (set-fontset-font (frame-parameter nil 'font)
-		    'han '("STSong" . "unicode-bmp"))
+  (when macosp (set-frame-font "Courier New-14"))
+  (when linuxp (set-frame-font "Courier New-12"))
+
+  (when macosp
+    (set-fontset-font (frame-parameter nil 'font)
+		      'han '("STSong" . "unicode-bmp"))
+    )
+
+  (when linuxp
+    (set-fontset-font (frame-parameter nil 'font)
+		      'han '("WenQuanYi Zen Hei" . "unicode-bmp"))
+    )
+
   (setq default-frame-alist
 	'(
 	  ;;(top . 0) (left . 0)
