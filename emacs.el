@@ -160,7 +160,7 @@
   (org-clock-persistence-insinuate)
 
   ;; remember
-  (when macosp
+  (when (not ntp)
     (setq org-directory "~/Dropbox/gtd/")
     (setq org-agenda-files (quote ("~/Dropbox/gtd/gtd.txt" "~/Dropbox/gtd/diary.txt")))
     )
@@ -171,7 +171,7 @@
   (add-hook 'remember-mode-hook 'org-remember-apply-template)
 
   ;; template
-  (when macosp
+  (when (not ntp)
     (setq org-remember-templates
 	  '(
 	    ("Diary" ?d "* %U %? :DIARY: \n"  "~/Dropbox/gtd/diary.txt")
