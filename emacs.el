@@ -1,7 +1,6 @@
 ;;; keybinding
 (global-set-key (kbd "C-=") 'hippie-expand)
-
-;;; built in
+;;; built-ins
 (defun k/init()
   " init my configuration. "
   ;; server
@@ -55,11 +54,6 @@
        (shell-command (concat "/usr/bin/open " (dired-get-filename)))
        ))))
 
-(defun k/key()
-  "key bindings"
-  (interactive)
-  (define-key map (kbd "C-=") 'hippie-expand)
-)
 (defun k/ui()
   " ui related configuration. "
   (interactive)
@@ -71,14 +65,26 @@
     )
 
   ;; font
-  (set-frame-font "Courier New-14")
-  (set-fontset-font (frame-parameter nil 'font)
-		    'han '("STSong" . "unicode-bmp"))
-  (setq default-frame-alist
-	'(
-	  ;;(top . 0) (left . 0)
-	  (width . 80) (height . 40)
-	  (font . "Courier New-14")))
+  (when macosp (set-frame-font "Courier New-14"))
+  (when ntp (set-frame-font "Courier New-12"))
+  (when linuxp (set-frame-font "Bitstream Vera Sans Mono-12"))
+
+  (when macosp
+    (set-fontset-font (frame-parameter nil 'font)
+		      'han '("STSong" . "unicode-bmp"))
+    )
+
+  (when linuxp
+    (set-fontset-font (frame-parameter nil 'font)
+		      'han '("WenQuanYi Zen Hei" . "unicode-bmp"))
+    )
+
+  (when macosp
+    (setq default-frame-alist
+	  '(
+	    ;;(top . 0) (left . 0)
+	    (width . 80) (height . 40)
+	    (font . "Courier New-14"))))
 
   ;; encoding
   (prefer-coding-system 'utf-8)
@@ -169,7 +175,7 @@
   (org-clock-persistence-insinuate)
 
   ;; remember
-  (when macosp
+  (when (not ntp)
     (setq org-directory "~/Dropbox/gtd/")
     (setq org-agenda-files (quote ("~/Dropbox/gtd/gtd.txt" "~/Dropbox/gtd/diary.txt")))
     )
@@ -180,7 +186,7 @@
   (add-hook 'remember-mode-hook 'org-remember-apply-template)
 
   ;; template
-  (when macosp
+  (when (not ntp)
     (setq org-remember-templates
 	  '(
 	    ("Diary" ?d "* %U %? :DIARY: \n"  "~/Dropbox/gtd/diary.txt")
@@ -211,46 +217,61 @@
   (require 'desktop)
   (desktop-save-mode 1)
   (setq desktop-restore-eager 50)
-
   )
 
+;;; functions
 (defun k/full()
   " full screen function for window."
   (interactive)
-  (defvar my-fullscreen-p t "Check if fullscreen is on or off")
-  (defun my-non-fullscreen ()
-    (interactive)
-    (if (fboundp 'w32-send-sys-command)
-	;; WM_SYSCOMMAND restore #xf120
-	(w32-send-sys-command 61728)
-      (progn (set-frame-parameter nil 'width 82)
-	     (set-frame-parameter nil 'fullscreen 'fullheight))))
 
-  (defun my-fullscreen ()
-    (interactive)
-    (if (fboundp 'w32-send-sys-command)
-	;; WM_SYSCOMMAND maximaze #xf030
-	(w32-send-sys-command 61488)
-      (set-frame-parameter nil 'fullscreen 'fullboth)))
+  (when ntp
+    (defvar my-fullscreen-p t "Check if fullscreen is on or off")
+    (defun my-non-fullscreen ()
+      (interactive)
+      (if (fboundp 'w32-send-sys-command)
+	  ;; WM_SYSCOMMAND restore #xf120
+	  (w32-send-sys-command 61728)
+	(progn (set-frame-parameter nil 'width 82)
+	       (set-frame-parameter nil 'fullscreen 'fullheight))))
 
-  (defun my-toggle-fullscreen ()
-    (interactive)
-    (setq my-fullscreen-p (not my-fullscreen-p))
-    (if my-fullscreen-p
-	(my-non-fullscreen)
-      (my-fullscreen)))
+    (defun my-fullscreen ()
+      (interactive)
+      (if (fboundp 'w32-send-sys-command)
+	  ;; WM_SYSCOMMAND maximaze #xf030
+	  (w32-send-sys-command 61488)
+	(set-frame-parameter nil 'fullscreen 'fullboth)))
+
+    (defun my-toggle-fullscreen ()
+      (interactive)
+      (setq my-fullscreen-p (not my-fullscreen-p))
+      (if my-fullscreen-p
+	  (my-non-fullscreen)
+	(my-fullscreen)))
+    )
+
+  (when linuxp
+    (defun my-toggle-fullscreen ()
+      "Full screen frame."
+      (interactive)
+      (x-send-client-message
+       nil 0 nil "_NET_WM_STATE" 32
+       '(2 "_NET_WM_STATE_FULLSCREEN" 0))
+      ))
 
   (global-set-key [f11] 'my-toggle-fullscreen)
   )
 
-
+(defun k/check-file(file)
+  "check if a file is in load-path."
+  (locate-file file load-path))
 ;;; extensions
 (defun k/cth()
   " color-theme. "
   (interactive)
-  (require 'color-theme)
-  (load "color-theme-library.el")
-  (color-theme-clarity)
+  (when (k/check-file "color-theme.el")
+    (require 'color-theme)
+    (color-theme-initialize)
+    (color-theme-clarity))
 )
 
 (defun k/web()
@@ -271,16 +292,18 @@
   (add-to-list 'auto-mode-alist '("\\.js$" . javascript-mode))
 
   ;; markdown
-  (require 'markdown-mode)
+  (autoload 'markdown-mode "markdown")
+  (add-to-list 'auto-mode-alist '("\\.text$" . markdown-mode))
   )
 
 (defun k/yas()
   " yasnippet. "
   (interactive)
-  (require 'yasnippet)
-  (yas/initialize)
-  (yas/load-directory "~/.emacs.d/snippets")
-  )
+  (when (k/check-file "yasnippet.el")
+    (require 'yasnippet)
+    (yas/initialize)
+    (yas/load-directory "~/.emacs.d/snippets")
+    ))
 
 ;;; k/func
 (defun k/func()
@@ -292,11 +315,10 @@
   (k/out)
   (k/org)
   (k/file)
-  (k/dired)
 
+  (k/full)
   (k/web)
   (k/yas)
-  (when ntp (k/full))
 )
 
 ;;; start
