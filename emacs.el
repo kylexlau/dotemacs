@@ -3,6 +3,7 @@
 ;;; built-ins
 (defun k/init()
   " init my configuration. "
+  (interactive)
   ;; server
   (server-start)
 
@@ -32,11 +33,12 @@
     )))
 
 (defun k/dired()
+  "dired mode"
   (interactive)
+  (require 'dired-x)
   (add-hook 'dired-load-hook
 	    (lambda ()
 	      ;; omit mode
-	      (require 'dired-x)
 	      (dired-omit-mode 1)
 	      (setq dired-omit-files "^#\\|^\\..*")  
 	      (setq dired-omit-extensions
@@ -47,12 +49,15 @@
 	      (setq dired-recursive-deletes 'top)
 	      (setq dired-dwim-target t)
 	      ))
-  (define-key dired-mode-map "w"
-    (function
-     (lambda ()
-       (interactive)
-       (shell-command (concat "/usr/bin/open " (dired-get-filename)))
-       ))))
+
+  (when macosp
+    (define-key dired-mode-map "w"
+      (function
+       (lambda ()
+	 (interactive)
+	 (shell-command (concat "/usr/bin/open " (dired-get-filename)))
+	 ))))
+  )
 
 (defun k/ui()
   " ui related configuration. "
@@ -304,6 +309,15 @@
     (yas/initialize)
     (yas/load-directory "~/.emacs.d/snippets")
     ))
+
+(defun k/tex()
+  "LaTeX."
+  (interactive)
+  (load "auctex.el" nil t t)
+  (load "preview-latex.el" nil t t)
+  (add-to-list 'auto-mode-alist '("\\.tex\\'" . LaTeX-mode))
+  (add-hook 'LaTeX-mode-hook '(lambda() (outline-minor-mode 1)))
+)
 
 ;;; k/func
 (defun k/func()
