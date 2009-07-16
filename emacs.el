@@ -30,6 +30,11 @@
     (progn
       (setq mac-command-modifier 'meta)
       (setq mac-option-modifier 'super)
+
+      ;; PATH
+      (setq exec-path (append exec-path
+			      '("/usr/local/bin" "/usr/local/git/bin" 
+				"/usr/texbin")))
     )))
 
 (defun k/dired()
@@ -42,7 +47,7 @@
 	      (dired-omit-mode 1)
 	      (setq dired-omit-files "^#\\|^\\..*")  
 	      (setq dired-omit-extensions
-		    '(".svn/" "CVS/" ".o" "~" ".bin" ".lbin" ".so" ".a" ".ln"))
+		    '(".svn/" "CVS/" ".o" "~" ".bin" ".lbin" ".so" ".a" ".ln" ".log" ".aux" ".toc" ".out"))
 
 	      (setq dired-guess-shell-gnutar "gtar")
 	      (setq dired-recursive-copies 'top)
@@ -327,12 +332,14 @@
   (k/cth)
   (k/macos)
   (k/out)
-  (k/org)
+  (k/dired)
   (k/file)
+  (k/org)
 
   (k/full)
   (k/web)
   (k/yas)
+  (k/tex)
 )
 
 ;;; start
