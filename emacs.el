@@ -103,14 +103,15 @@
   (setq frame-title-format
       '("Emacs@%b " (buffer-file-name ("("buffer-file-name")"))))
 
-  (column-number-mode 1)
-  (setq show-trailing-whitespace t)
-
   ;; transparency
   (modify-frame-parameters (selected-frame)
 			   '((alpha . 90)))
 
+  (setq show-trailing-whitespace t)
+
   ;; minor modes
+  (column-number-mode 1)
+  (size-indication-mode 1)
   (show-paren-mode 1)
   (auto-image-file-mode 1)
   (transient-mark-mode 1)
