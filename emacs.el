@@ -30,30 +30,23 @@
     (progn
       (setq mac-command-modifier 'meta)
       (setq mac-option-modifier 'super)
-
-      ;; PATH
-      (setq exec-path (append exec-path
-			      '("/usr/local/bin" "/usr/local/git/bin" 
-				"/usr/texbin")))
     )))
 
 (defun k/dired()
   "dired mode"
   (interactive)
-  (require 'dired-x)
-  (add-hook 'dired-load-hook
-	    (lambda ()
-	      ;; omit mode
-	      (dired-omit-mode 1)
-	      (setq dired-omit-files "^#\\|^\\..*")  
-	      (setq dired-omit-extensions
-		    '(".svn/" "CVS/" ".o" "~" ".bin" ".lbin" ".so" ".a" ".ln" ".log" ".aux" ".toc" ".out"))
 
-	      (setq dired-guess-shell-gnutar "gtar")
-	      (setq dired-recursive-copies 'top)
-	      (setq dired-recursive-deletes 'top)
-	      (setq dired-dwim-target t)
-	      ))
+  ;; omit mode
+  (require 'dired-x)
+  (dired-omit-mode 1)
+  (setq dired-omit-files "^#\\|^\\..*")  
+  (setq dired-omit-extensions
+	'(".svn/" "CVS/" ".o" "~" ".bin" ".lbin" ".so" ".a" ".ln" ".log" ".aux" ".toc" ".out"))
+
+  (setq dired-guess-shell-gnutar "gtar")
+  (setq dired-recursive-copies 'top)
+  (setq dired-recursive-deletes 'top)
+  (setq dired-dwim-target t)
 
   (when macosp
     (define-key dired-mode-map "w"
@@ -131,7 +124,6 @@
   (fset 'yes-or-no-p 'y-or-n-p)
   (set-variable 'confirm-kill-emacs 'yes-or-no-p)
   )
-
 
 (defun k/out()
   "outline related."
