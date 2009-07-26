@@ -7,6 +7,10 @@
   ;; server
   (server-start)
 
+  ;; encoding
+  (prefer-coding-system 'utf-8)
+  (set-language-environment 'utf-8)
+
   ;; load path
   (add-to-list 'load-path "~/.emacs.d/elisp")
   (progn (cd "~/.emacs.d/elisp")
@@ -89,8 +93,6 @@
 	    (width . 80) (height . 40)
 	    (font . "Courier New-14"))))
 
-  ;; encoding
-  (prefer-coding-system 'utf-8)
 
   ;; frame title
   (setq frame-title-format
