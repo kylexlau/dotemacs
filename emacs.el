@@ -7,10 +7,6 @@
   ;; server
   (server-start)
 
-  ;; encoding
-  (prefer-coding-system 'utf-8)
-  (set-language-environment 'utf-8)
-
   ;; load path
   (add-to-list 'load-path "~/.emacs.d/elisp")
   (progn (cd "~/.emacs.d/elisp")
@@ -25,6 +21,11 @@
 
   (defvar macosp (string= "darwin" (symbol-name system-type))
     "If Emacs runs on a Mac OS system.")
+
+  ;; encoding
+  (when (not ntp)
+    (prefer-coding-system 'utf-8)
+    (set-language-environment 'utf-8))
   )
 
 (defun k/macos()
