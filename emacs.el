@@ -314,11 +314,21 @@
 (defun k/tex()
   "LaTeX."
   (interactive)
-  (load "auctex.el" nil t t)
-  (load "preview-latex.el" nil t t)
-  (add-to-list 'auto-mode-alist '("\\.tex\\'" . LaTeX-mode))
-  (add-hook 'LaTeX-mode-hook '(lambda() (outline-minor-mode 1)))
+  (when (k/check-file "auctex.el")
+    (load "auctex.el" nil t t)
+    (load "preview-latex.el" nil t t)
+    (add-to-list 'auto-mode-alist '("\\.tex\\'" . LaTeX-mode))
+    (add-hook 'LaTeX-mode-hook '(lambda() (outline-minor-mode 1)))
+    )
 )
+
+(defun k/textile()
+  "Textile mode."
+  (interactive)
+  (when (k/check-file "textile-mode.el")
+    (require 'textile-mode)
+    (add-to-list 'auto-mode-alist '("\\.textile\\'" . textile-mode))
+    )
 
 ;;; k/func
 (defun k/func()
