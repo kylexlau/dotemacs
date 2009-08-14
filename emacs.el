@@ -329,6 +329,7 @@
     (require 'textile-mode)
     (add-to-list 'auto-mode-alist '("\\.textile\\'" . textile-mode))
     )
+  )
 
 ;;; k/func
 (defun k/func()
@@ -346,6 +347,7 @@
   (k/web)
   (k/yas)
   (k/tex)
+  (k/textile)
 )
 
 ;;; start
