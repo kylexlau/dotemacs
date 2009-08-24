@@ -1,5 +1,16 @@
 ;;; keybinding
 (global-set-key (kbd "C-=") 'hippie-expand)
+
+;;; defval
+(defvar ntp (string= "windows-nt" (symbol-name system-type))
+  "If Emacs runs on a Windows system.")
+
+(defvar linuxp (string= "gnu/linux" (symbol-name system-type))
+  "If Emacs runs on a Linux system.")
+
+(defvar macosp (string= "darwin" (symbol-name system-type))
+  "If Emacs runs on a Mac OS system.")
+
 ;;; built-ins
 (defun k/init()
   " init my configuration. "
@@ -11,16 +22,6 @@
   (add-to-list 'load-path "~/.emacs.d/elisp")
   (progn (cd "~/.emacs.d/elisp")
 	 (normal-top-level-add-subdirs-to-load-path))
-
-  ;; variable for system type
-  (defvar ntp (string= "windows-nt" (symbol-name system-type))
-    "If Emacs runs on a Windows system.")
-
-  (defvar linuxp (string= "gnu/linux" (symbol-name system-type))
-    "If Emacs runs on a Linux system.")
-
-  (defvar macosp (string= "darwin" (symbol-name system-type))
-    "If Emacs runs on a Mac OS system.")
 
   ;; encoding
   (when (not ntp)
@@ -181,15 +182,15 @@
   (org-clock-persistence-insinuate)
 
   ;; remember
-  (when (not ntp)
-    (setq org-directory "~/Dropbox/gtd/")
-    (setq org-agenda-files (quote ("~/Dropbox/gtd/gtd.txt" "~/Dropbox/gtd/diary.txt")))
-    )
-
   (setq org-default-notes-file "~/.notes")
   (setq remember-annotation-functions '(org-remember-annotation))
   (setq remember-handler-functions '(org-remember-handler))
   (add-hook 'remember-mode-hook 'org-remember-apply-template)
+
+  (when (not ntp)
+    (setq org-directory "~/Dropbox/gtd/")
+    (setq org-agenda-files (quote ("~/Dropbox/gtd/gtd.txt" "~/Dropbox/gtd/diary.txt")))
+    )
 
   ;; template
   (when (not ntp)
@@ -203,6 +204,22 @@
 	    ("Notes" ?n "* %U %^{Title} :NOTES \n %?" "~/Dropbox/gtd/diary.txt")
 	    ("TODO" ?t "** TODO %? \nAdded @ %T" "~/Dropbox/gtd/gtd.txt" "Tasks")
 	    )))
+
+  ;; for Windows
+  (when ntp
+    (setq org-directory "~/doc/My Dropbox/gtd/")
+    (setq org-agenda-files (quote ("~/doc/My Dropbox/gtd/gtd.txt" "~/doc/My Dropbox/gtd/diary.txt")))
+    )
+
+  ;; template
+  (when ntp
+    (setq org-remember-templates
+	  '(
+	    ("Diary" ?d "* %U %? :DIARY: \n"  "~/doc/My Dropbox/gtd/diary.txt")
+	    ("Notes" ?n "* %U %^{Title} :NOTES \n %?" "~/doc/My Dropbox/gtd/diary.txt")
+	    ("TODO" ?t "** TODO %? \nAdded @ %T" "~/doc/My Dropbox/gtd/gtd.txt" "Tasks")
+	    )))
+
   )
 
 (defun k/file()
