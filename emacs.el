@@ -23,6 +23,10 @@
   (progn (cd "~/.emacs.d/elisp")
 	 (normal-top-level-add-subdirs-to-load-path))
 
+  (add-to-list 'load-path "~/prj/emacs/elisp")
+  (progn (cd "~/prj/emacs/")
+	 (normal-top-level-add-subdirs-to-load-path))
+
   ;; encoding
   (when (not ntp)
     (prefer-coding-system 'utf-8)
@@ -216,8 +220,8 @@
     (setq org-remember-templates
 	  '(
 	    ("Diary" ?d "* %U %? :DIARY: \n"  "~/doc/My Dropbox/gtd/diary.txt")
-	    ("Notes" ?n "* %U %^{Title} :NOTES \n %?" "~/doc/My Dropbox/gtd/diary.txt")
-	    ("TODO" ?t "** TODO %? \nAdded @ %T" "~/doc/My Dropbox/gtd/gtd.txt" "Tasks")
+	    ("Notes" ?n "* %U %^{Title} :NOTES: \n %?" "~/doc/My Dropbox/gtd/diary.txt")
+	    ("TODO" ?t "** TODO %? \nAdded @ %T" "~/doc/My Dropbox/gtd/diary.txt" "TODOs")
 	    )))
 
   )
@@ -325,7 +329,13 @@
   (when (k/check-file "yasnippet.el")
     (require 'yasnippet)
     (yas/initialize)
-    (yas/load-directory "~/.emacs.d/snippets")
+    (yas/load-directory "~/prj/emacs/elisp/snippets")
+    (setq yas/prompt-functions '(yas/dropdown-prompt
+				 yas/completing-prompt
+				 yas/ido-prompt
+				 yas/x-prompt
+				 yas/no-prompt))
+
     ))
 
 (defun k/tex()
