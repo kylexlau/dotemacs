@@ -24,7 +24,7 @@
 	 (normal-top-level-add-subdirs-to-load-path))
 
   (add-to-list 'load-path "~/prj/emacs/elisp")
-  (progn (cd "~/prj/emacs/")
+  (progn (cd "~/prj/emacs/elisp")
 	 (normal-top-level-add-subdirs-to-load-path))
 
   ;; encoding
@@ -358,6 +358,32 @@
     )
   )
 
+(defun k/company()
+  "Company.el."
+  (interactive)
+  (when (k/check-file "company.el")
+    (autoload 'company-mode "company" nil t)
+    (setq company-idle-delay t)
+    (setq company-idle-delay 0.2)
+    (setq company-minimum-prefix-length 1)
+;    (setq company-show-numbers nil)
+    (dolist (hook (list
+		   'emacs-lisp-mode-hook
+		   'lisp-mode-hook
+		   'lisp-interaction-mode-hook
+		   'scheme-mode-hook
+		   'c-mode-hook
+		   'c++-mode-hook
+		   'java-mode-hook
+		   'haskell-mode-hook
+		   'asm-mode-hook
+		   'emms-tag-editor-mode-hook
+		   'sh-mode-hook
+		   ))
+      (add-hook hook 'company-mode))
+    )
+  )
+
 ;;; k/func
 (defun k/func()
   (interactive)
@@ -375,9 +401,9 @@
   (k/yas)
   (k/tex)
   (k/textile)
+  (k/company)
 )
 
 ;;; start
 (k/func)
-
 ;;; k.el ends here
