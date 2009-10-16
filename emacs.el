@@ -76,7 +76,7 @@
   ;; font
   (when macosp (set-frame-font "Courier New-14"))
   (when ntp (set-frame-font "Courier New-12"))
-  (when linuxp (set-frame-font "Bitstream Vera Sans Mono-12"))
+  (when linuxp (set-frame-font "Bitstream Vera Sans Mono-8"))
 
   (when macosp
     (set-fontset-font (frame-parameter nil 'font)
@@ -240,6 +240,10 @@
   (require 'desktop)
   (desktop-save-mode 1)
   (setq desktop-restore-eager 50)
+  )
+
+(defun k/perl()
+  "cperl mode is better than perl mode."
   )
 
 ;;; functions
