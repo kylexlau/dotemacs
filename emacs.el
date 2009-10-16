@@ -1,7 +1,7 @@
 ;;; keybinding
 (global-set-key (kbd "C-=") 'hippie-expand)
 
-;;; defval
+;;; my variables
 (defvar ntp (string= "windows-nt" (symbol-name system-type))
   "If Emacs runs on a Windows system.")
 
@@ -11,7 +11,52 @@
 (defvar macosp (string= "darwin" (symbol-name system-type))
   "If Emacs runs on a Mac OS system.")
 
-;;; built-ins
+;;; my functions
+(defun k/full()
+  " full screen function for window."
+  (interactive)
+
+  (when ntp
+    (defvar my-fullscreen-p t "Check if fullscreen is on or off")
+    (defun my-non-fullscreen ()
+      (interactive)
+      (if (fboundp 'w32-send-sys-command)
+	  ;; WM_SYSCOMMAND restore #xf120
+	  (w32-send-sys-command 61728)
+	(progn (set-frame-parameter nil 'width 82)
+	       (set-frame-parameter nil 'fullscreen 'fullheight))))
+
+    (defun my-fullscreen ()
+      (interactive)
+      (if (fboundp 'w32-send-sys-command)
+	  ;; WM_SYSCOMMAND maximaze #xf030
+	  (w32-send-sys-command 61488)
+	(set-frame-parameter nil 'fullscreen 'fullboth)))
+
+    (defun my-toggle-fullscreen ()
+      (interactive)
+      (setq my-fullscreen-p (not my-fullscreen-p))
+      (if my-fullscreen-p
+	  (my-non-fullscreen)
+	(my-fullscreen)))
+    )
+
+  (when linuxp
+    (defun my-toggle-fullscreen ()
+      "Full screen frame."
+      (interactive)
+      (x-send-client-message
+       nil 0 nil "_NET_WM_STATE" 32
+       '(2 "_NET_WM_STATE_FULLSCREEN" 0))
+      ))
+
+  (global-set-key [f11] 'my-toggle-fullscreen)
+  )
+
+(defun k/check-file(file)
+  "check if a file is in load-path."
+  (locate-file file load-path))
+;;; config for built-ins
 (defun k/init()
   " init my configuration. "
   (interactive)
@@ -23,10 +68,17 @@
   (progn (cd "~/.emacs.d/elisp")
 	 (normal-top-level-add-subdirs-to-load-path))
 
+  (add-to-list 'load-path "~/prj/emacs/elisp")
+  (progn (cd "~/prj/emacs/elisp")
+	 (normal-top-level-add-subdirs-to-load-path))
+
   ;; encoding
   (when (not ntp)
     (prefer-coding-system 'utf-8)
     (set-language-environment 'utf-8))
+
+  ;; i'm not a novice anymore.
+  (setq disabled-command-function nil)
   )
 
 (defun k/macos()
@@ -75,8 +127,8 @@
 
   ;; font
   (when macosp (set-frame-font "Courier New-14"))
-  (when ntp (set-frame-font "Courier New-12"))
-  (when linuxp (set-frame-font "Bitstream Vera Sans Mono-8"))
+  (when ntp (set-frame-font "Consolas-12"))
+  (when linuxp (set-frame-font "Bitstream Vera Sans Mono-12"))
 
   (when macosp
     (set-fontset-font (frame-parameter nil 'font)
@@ -216,8 +268,8 @@
     (setq org-remember-templates
 	  '(
 	    ("Diary" ?d "* %U %? :DIARY: \n"  "~/doc/My Dropbox/gtd/diary.txt")
-	    ("Notes" ?n "* %U %^{Title} :NOTES \n %?" "~/doc/My Dropbox/gtd/diary.txt")
-	    ("TODO" ?t "** TODO %? \nAdded @ %T" "~/doc/My Dropbox/gtd/gtd.txt" "Tasks")
+	    ("Notes" ?n "* %U %^{Title} :NOTES: \n %?" "~/doc/My Dropbox/gtd/diary.txt")
+	    ("TODO" ?t "** TODO %? \nAdded @ %T" "~/doc/My Dropbox/gtd/diary.txt" "TODOs")
 	    )))
 
   )
@@ -244,54 +296,10 @@
 
 (defun k/perl()
   "cperl mode is better than perl mode."
+  (defalias 'perl-mode 'cperl-mode)
   )
 
-;;; functions
-(defun k/full()
-  " full screen function for window."
-  (interactive)
-
-  (when ntp
-    (defvar my-fullscreen-p t "Check if fullscreen is on or off")
-    (defun my-non-fullscreen ()
-      (interactive)
-      (if (fboundp 'w32-send-sys-command)
-	  ;; WM_SYSCOMMAND restore #xf120
-	  (w32-send-sys-command 61728)
-	(progn (set-frame-parameter nil 'width 82)
-	       (set-frame-parameter nil 'fullscreen 'fullheight))))
-
-    (defun my-fullscreen ()
-      (interactive)
-      (if (fboundp 'w32-send-sys-command)
-	  ;; WM_SYSCOMMAND maximaze #xf030
-	  (w32-send-sys-command 61488)
-	(set-frame-parameter nil 'fullscreen 'fullboth)))
-
-    (defun my-toggle-fullscreen ()
-      (interactive)
-      (setq my-fullscreen-p (not my-fullscreen-p))
-      (if my-fullscreen-p
-	  (my-non-fullscreen)
-	(my-fullscreen)))
-    )
-
-  (when linuxp
-    (defun my-toggle-fullscreen ()
-      "Full screen frame."
-      (interactive)
-      (x-send-client-message
-       nil 0 nil "_NET_WM_STATE" 32
-       '(2 "_NET_WM_STATE_FULLSCREEN" 0))
-      ))
-
-  (global-set-key [f11] 'my-toggle-fullscreen)
-  )
-
-(defun k/check-file(file)
-  "check if a file is in load-path."
-  (locate-file file load-path))
-;;; extensions
+;;; config for extensions
 (defun k/cth()
   " color-theme. "
   (interactive)
@@ -329,7 +337,13 @@
   (when (k/check-file "yasnippet.el")
     (require 'yasnippet)
     (yas/initialize)
-    (yas/load-directory "~/.emacs.d/snippets")
+    (yas/load-directory "~/prj/emacs/elisp/snippets")
+    (setq yas/prompt-functions '(yas/dropdown-prompt
+				 yas/completing-prompt
+				 yas/ido-prompt
+				 yas/x-prompt
+				 yas/no-prompt))
+
     ))
 
 (defun k/tex()
@@ -352,7 +366,39 @@
     )
   )
 
-;;; k/func
+(defun k/company()
+  "Company.el."
+  (interactive)
+  (when (k/check-file "company.el")
+    (autoload 'company-mode "company" nil t)
+    (setq company-idle-delay t)
+    (setq company-idle-delay 0.2)
+    (setq company-minimum-prefix-length 1)
+;    (setq company-show-numbers nil)
+    (dolist (hook (list
+		   'emacs-lisp-mode-hook
+		   'lisp-mode-hook
+		   'lisp-interaction-mode-hook
+		   'scheme-mode-hook
+		   'c-mode-hook
+		   'c++-mode-hook
+		   'java-mode-hook
+		   'haskell-mode-hook
+		   'asm-mode-hook
+		   'emms-tag-editor-mode-hook
+		   'sh-mode-hook
+		   ))
+      (add-hook hook 'company-mode))
+    )
+  )
+
+(defun k/perl()
+  "Perl mode."
+  (interactive)
+  (defalias 'perl-mode 'cperl-mode)
+  )
+
+;;; define k/func and start it
 (defun k/func()
   (interactive)
   (k/init)
@@ -369,9 +415,9 @@
   (k/yas)
   (k/tex)
   (k/textile)
+  (k/company)
+  (k/perl)
 )
 
-;;; start
 (k/func)
-
-;;; k.el ends here
+;;; emacs.el ends here
