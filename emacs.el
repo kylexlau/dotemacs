@@ -127,8 +127,13 @@
 
   ;; font
   (when macosp (set-frame-font "Courier New-14"))
-  (when ntp (set-frame-font "Consolas-12"))
   (when linuxp (set-frame-font "Bitstream Vera Sans Mono-12"))
+
+  (when ntp (set-frame-font "Consolas-12")
+	(setq default-frame-alist 
+	      '((width . 80)
+		(height . 30)
+		(font . "Consolas-12"))))
 
   (when macosp
     (set-fontset-font (frame-parameter nil 'font)
@@ -268,8 +273,9 @@
     (setq org-remember-templates
 	  '(
 	    ("Diary" ?d "* %U %? :DIARY: \n"  "~/doc/My Dropbox/gtd/diary.txt")
-	    ("Notes" ?n "* %U %^{Title} :NOTES: \n %?" "~/doc/My Dropbox/gtd/diary.txt")
+	    ("Notes" ?n "* %U %^{Title} :NOTES: \n " "~/doc/My Dropbox/gtd/diary.txt")
 	    ("TODO" ?t "** TODO %? \nAdded @ %T" "~/doc/My Dropbox/gtd/diary.txt" "TODOs")
+	    ("Programming" ?p "** TODO %? \nAdded @ %T" "~/doc/My Dropbox/gtd/programming.txt" "todolist")
 	    )))
 
   )
@@ -393,6 +399,16 @@
   (defalias 'perl-mode 'cperl-mode)
   )
 
+(defun k/plsql()
+  "pl/sql mode."
+  (interactive)
+  (when (k/check-file "plsql.el")
+    (autoload 'plsql-mode "plsql-mode" "PL/SQL Mode" t)
+    (setq auto-mode-alist 
+	  (cons (cons "\\.sql$" 'plsql-mode) auto-mode-alist))
+    (setq plsql-indent 2)
+    )
+
 ;;; define k/func and start it
 (defun k/func()
   (interactive)
@@ -416,4 +432,3 @@
 
 (k/func)
 ;;; k.el ends here
-
