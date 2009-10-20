@@ -403,11 +403,11 @@
   "pl/sql mode."
   (interactive)
   (when (k/check-file "plsql.el")
-    (autoload 'plsql-mode "plsql-mode" "PL/SQL Mode" t)
+    (autoload 'plsql-mode "plsql" "PL/SQL Mode" t)
     (setq auto-mode-alist 
 	  (cons (cons "\\.sql$" 'plsql-mode) auto-mode-alist))
     (setq plsql-indent 2)
-    )
+    ))
 
 ;;; define k/func and start it
 (defun k/func()
@@ -428,6 +428,7 @@
   (k/textile)
   (k/company)
   (k/perl)
+  (k/plsql)
 )
 
 (k/func)
