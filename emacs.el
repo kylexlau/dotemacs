@@ -56,7 +56,7 @@
 (defun k/check-file(file)
   "check if a file is in load-path."
   (locate-file file load-path))
-;;; config for built-ins
+;;; built-ins
 (defun k/init()
   " init my configuration. "
   (interactive)
@@ -129,6 +129,12 @@
   (when macosp (set-frame-font "Courier New-14"))
   (when ntp (set-frame-font "Consolas-12"))
   (when linuxp (set-frame-font "Consolas-8")) ; small font for my eeepc 1000he
+
+  (when ntp (set-frame-font "Consolas-12")
+	(setq default-frame-alist 
+	      '((width . 80)
+		(height . 30)
+		(font . "Consolas-12"))))
 
   (when macosp
     (set-fontset-font (frame-parameter nil 'font)
@@ -273,8 +279,9 @@
     (setq org-remember-templates
 	  '(
 	    ("Diary" ?d "* %U %? :DIARY: \n"  "~/doc/My Dropbox/gtd/diary.txt")
-	    ("Notes" ?n "* %U %^{Title} :NOTES: \n %?" "~/doc/My Dropbox/gtd/diary.txt")
+	    ("Notes" ?n "* %U %^{Title} :NOTES: \n " "~/doc/My Dropbox/gtd/diary.txt")
 	    ("TODO" ?t "** TODO %? \nAdded @ %T" "~/doc/My Dropbox/gtd/diary.txt" "TODOs")
+	    ("Programming" ?p "** TODO %? \nAdded @ %T" "~/doc/My Dropbox/gtd/programming.txt" "todolist")
 	    )))
 
   )
@@ -299,12 +306,7 @@
   (setq desktop-restore-eager 50)
   )
 
-(defun k/perl()
-  "cperl mode is better than perl mode."
-  (defalias 'perl-mode 'cperl-mode)
-  )
-
-;;; config for extensions
+;;; extensions
 (defun k/cth()
   " color-theme. "
   (interactive)
@@ -403,7 +405,17 @@
   (defalias 'perl-mode 'cperl-mode)
   )
 
-;;; define k/func and start it
+(defun k/plsql()
+  "pl/sql mode."
+  (interactive)
+  (when (k/check-file "plsql.el")
+    (autoload 'plsql-mode "plsql" "PL/SQL Mode" t)
+    (setq auto-mode-alist 
+	  (cons (cons "\\.sql$" 'plsql-mode) auto-mode-alist))
+    (setq plsql-indent 2)
+    ))
+
+;;; k/func
 (defun k/func()
   (interactive)
   (k/init)
@@ -422,6 +434,7 @@
   (k/textile)
   (k/company)
   (k/perl)
+  (k/plsql)
 )
 
 (k/func)
