@@ -128,7 +128,7 @@
   ;; font
   (when macosp (set-frame-font "Courier New-14"))
   (when ntp (set-frame-font "Consolas-12"))
-  (when linuxp (set-frame-font "Bitstream Vera Sans Mono-12"))
+  (when linuxp (set-frame-font "Consolas-8")) ; small font for my eeepc 1000he
 
   (when macosp
     (set-fontset-font (frame-parameter nil 'font)
@@ -140,13 +140,18 @@
 		      'han '("WenQuanYi Zen Hei" . "unicode-bmp"))
     )
 
+  (setq default-frame-alist
+	'(
+	  (top . 0) (left . 0)
+	  (width . 80) (height . 25)
+	  (font . "Consolas-8")))
+
   (when macosp
     (setq default-frame-alist
 	  '(
 	    ;;(top . 0) (left . 0)
 	    (width . 80) (height . 40)
 	    (font . "Courier New-14"))))
-
 
   ;; frame title
   (setq frame-title-format
