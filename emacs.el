@@ -127,14 +127,23 @@
 
   ;; font
   (when macosp (set-frame-font "Courier New-14"))
-  (when ntp (set-frame-font "Consolas-12"))
-  (when linuxp (set-frame-font "Consolas-8")) ; small font for my eeepc 1000he
+  (when ntp (set-frame-font "Consolas-11"))
+  (when linuxp 
+    (set-frame-font "Consolas-8")
 
-  (when ntp (set-frame-font "Consolas-12")
-	(setq default-frame-alist 
-	      '((width . 80)
-		(height . 30)
-		(font . "Consolas-12"))))
+    (setq default-frame-alist
+	  '(
+	    (top . 0) (left . 0)
+	    (width . 80) (height . 25)
+	    (font . "Consolas-8")))
+	) ; small font for my eeepc 1000he
+
+  (when ntp 
+    (set-frame-font "Consolas-12")
+    (setq default-frame-alist 
+	  '((width . 80)
+	    (height . 30)
+	    (font . "Consolas-12"))))
 
   (when macosp
     (set-fontset-font (frame-parameter nil 'font)
@@ -145,12 +154,6 @@
     (set-fontset-font (frame-parameter nil 'font)
 		      'han '("WenQuanYi Zen Hei" . "unicode-bmp"))
     )
-
-  (setq default-frame-alist
-	'(
-	  (top . 0) (left . 0)
-	  (width . 80) (height . 25)
-	  (font . "Consolas-8")))
 
   (when macosp
     (setq default-frame-alist
@@ -377,7 +380,7 @@
   "Company.el."
   (interactive)
   (when (k/check-file "company.el")
-    (autoload 'company-mode "company" nil t)
+    (autoload 'company-mode "company" "company mode." t)
     (setq company-idle-delay t)
     (setq company-idle-delay 0.2)
     (setq company-minimum-prefix-length 1)
@@ -415,6 +418,17 @@
     (setq plsql-indent 2)
     ))
 
+(defun k/lua()
+  "lua mode."
+  (interactive)
+  (when (k/check-file "lua-mode.el")
+    (autoload 'lua-mode "lua-mode" "Lua editing mode." t)
+    (setq auto-mode-alist 
+	  (cons '("\\.lua$" . lua-mode) auto-mode-alist))
+    (add-hook 'lua-mode-hook 'hs-minor-mode)
+    )
+  )
+
 ;;; k/func
 (defun k/func()
   (interactive)
@@ -435,6 +449,7 @@
   (k/company)
   (k/perl)
   (k/plsql)
+  (k/lua)
 )
 
 (k/func)
