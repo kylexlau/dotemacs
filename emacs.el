@@ -133,7 +133,7 @@
   (when ntp (set-frame-font "Consolas-12")
 	(setq default-frame-alist 
 	      '((width . 80)
-		(height . 30)
+		(height . 24)
 		(font . "Consolas-12"))))
 
   (when macosp
@@ -144,19 +144,18 @@
   (when linuxp
     (set-fontset-font (frame-parameter nil 'font)
 		      'han '("WenQuanYi Zen Hei" . "unicode-bmp"))
-    )
-
-  (setq default-frame-alist
-	'(
+    (setq default-frame-alist
+	  '(
 	  (top . 0) (left . 0)
-	  (width . 80) (height . 25)
+	  (width . 80) (height . 24)
 	  (font . "Consolas-8")))
+    )
 
   (when macosp
     (setq default-frame-alist
 	  '(
 	    ;;(top . 0) (left . 0)
-	    (width . 80) (height . 40)
+	    (width . 80) (height . 24)
 	    (font . "Courier New-14"))))
 
   ;; frame title
@@ -202,24 +201,6 @@
   (define-key outline-minor-mode-map (kbd "\C-u <tab>") 'org-shifttab)
 
   (add-hook 'emacs-lisp-mode-hook 'outline-minor-mode)
-
-  (add-hook 'ruby-mode-hook
-	    '(lambda ()
-	       (outline-minor-mode 1)
-	       (setq outline-regexp " *\\(def \\|class\\|module\\)")
-	       (hide-sublevels 1)))
-
-  (add-hook 'php-mode-hook
-	    '(lambda ()
-	       (outline-minor-mode 1)
-	       (setq outline-regexp " *\\(private funct\\|public funct\\|funct\\|class\\|#head\\|/\\*\\*\\)")
-	       (hide-sublevels 1)))
-
-  (add-hook 'python-mode-hook
-	    '(lambda ()
-	       (outline-minor-mode 1)
-	       (setq outline-regexp " *\\(def \\|clas\\|#hea\\)")
-	       (hide-sublevels 1)))
   )
 
 (defun k/org()
@@ -260,12 +241,7 @@
     (setq org-remember-templates
 	  '(
 	    ("Diary" ?d "* %U %? :DIARY: \n"  "~/Dropbox/gtd/diary.txt")
-	    ("Review" ?r "* %U Daily Review :DR: \n%[~/.daily_review.txt]\n" "~/Dropbox/gtd/diary.txt")
-	    ("Book" ?b "* %U %^{Title} :READING: \n%[~/.booktemp.txt]\n" "~/Dropbox/gtd/diary.txt")
-	    ("Film" ?f "* %U %^{Title} :FILM: \n%[~/.film_temp.txt]\n" "~/Dropbox/gtd/diary.txt")
-	    ("Clipboard" ?c "* %U %^{Headline} %^g\n%c\n%?"  "~/Dropbox/gtd/diary.txt")
-	    ("Notes" ?n "* %U %^{Title} :NOTES \n %?" "~/Dropbox/gtd/diary.txt")
-	    ("TODO" ?t "** TODO %? \nAdded @ %T" "~/Dropbox/gtd/gtd.txt" "Tasks")
+	    ("Notes" ?n "* %U %^{Title} :NOTES: \n %?" "~/Dropbox/gtd/diary.txt")
 	    )))
 
   ;; for Windows
@@ -415,6 +391,13 @@
     (setq plsql-indent 2)
     ))
 
+(defun k/go()
+  "go programming language."
+  (interactive)
+  (when (k/check-file "go-mode-load.el")
+    (require 'go-mode-load)
+    ))
+
 ;;; k/func
 (defun k/func()
   (interactive)
@@ -435,6 +418,7 @@
   (k/company)
   (k/perl)
   (k/plsql)
+  (k/go)
 )
 
 (k/func)
