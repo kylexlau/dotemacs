@@ -21,7 +21,7 @@
     (defun my-non-fullscreen ()
       (interactive)
       (if (fboundp 'w32-send-sys-command)
-	  ;; WM_SYSCOMMAND restore #xf120
+0	  ;; WM_SYSCOMMAND restore #xf120
 	  (w32-send-sys-command 61728)
 	(progn (set-frame-parameter nil 'width 82)
 	       (set-frame-parameter nil 'fullscreen 'fullheight))))
@@ -398,6 +398,35 @@
     (require 'go-mode-load)
     ))
 
+(defun k/ruby()
+  "Ruby programming."
+  (interactive)
+  (when (k/check-file "ruby-mode.el")
+    (autoload 'ruby-mode "ruby-mode" "Major mode for ruby files" t)
+    (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
+    (add-to-list 'interpreter-mode-alist '("ruby" . ruby-mode))
+    )
+  
+  (when (k/check-file "ruby-electric.el")
+    (autoload 'ruby-electric-mode "ruby-electric" "mode for ruby" t)
+    )
+
+  ;; ri_repl in path
+  (when (k/check-file "ri.el")
+    (autoload 'ri "ri" "mode for ruby ri tool" t)
+    )
+
+  (when (k/check-file "inf-ruby.el")
+    (autoload 'run-ruby "inf-ruby" "Run an inferior Ruby process" t)
+    (autoload 'inf-ruby-keys "inf-ruby" "Set local key defs for inf-ruby in ruby-mode" t)
+    (add-hook 'ruby-mode-hook
+	      '(lambda ()
+		 (inf-ruby-keys)
+		 (ruby-electric-mode)
+		 ))
+    )
+  )
+
 ;;; k/func
 (defun k/func()
   (interactive)
@@ -419,6 +448,7 @@
   (k/perl)
   (k/plsql)
   (k/go)
+  (k/ruby)
 )
 
 (k/func)
