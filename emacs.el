@@ -1,5 +1,6 @@
 ;;; keybinding
 (global-set-key (kbd "C-=") 'hippie-expand)
+(global-set-key (kbd "C-c o") 'speedbar-get-focus)
 
 ;;; my variables
 (defvar ntp (string= "windows-nt" (symbol-name system-type))
