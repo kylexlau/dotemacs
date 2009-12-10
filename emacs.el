@@ -1,4 +1,5 @@
 ;;; keybinding
+(global-set-key (kbd "C-c o") 'speedbar-select-attached-frame)
 (global-set-key (kbd "C-=") 'hippie-expand)
 
 ;;; my variables
@@ -61,7 +62,12 @@
   " init my configuration. "
   (interactive)
   ;; server
-  (server-start)
+
+  ;; fix ~/.emacs.d/server is unsafe on w32
+  (when (and (= emacs-major-version 23) (equal window-system 'w32))
+    (defun server-ensure-safe-dir (dir) "Noop" t))
+
+  ;; (server-start)
 
   ;; load path
   (add-to-list 'load-path "~/.emacs.d/elisp")
@@ -193,36 +199,6 @@
   ;; yes/no to y/n
   (fset 'yes-or-no-p 'y-or-n-p)
   (set-variable 'confirm-kill-emacs 'yes-or-no-p)
-  )
-
-(defun k/out()
-  "outline related."
-  (interactive)
-
-  (require 'outline)
-
-  (define-key outline-minor-mode-map (kbd "<tab>") 'org-cycle)
-  (define-key outline-minor-mode-map (kbd "\C-u <tab>") 'org-shifttab)
-
-  (add-hook 'emacs-lisp-mode-hook 'outline-minor-mode)
-
-  (add-hook 'ruby-mode-hook
-	    '(lambda ()
-	       (outline-minor-mode 1)
-	       (setq outline-regexp " *\\(def \\|class\\|module\\)")
-	       (hide-sublevels 1)))
-
-  (add-hook 'php-mode-hook
-	    '(lambda ()
-	       (outline-minor-mode 1)
-	       (setq outline-regexp " *\\(private funct\\|public funct\\|funct\\|class\\|#head\\|/\\*\\*\\)")
-	       (hide-sublevels 1)))
-
-  (add-hook 'python-mode-hook
-	    '(lambda ()
-	       (outline-minor-mode 1)
-	       (setq outline-regexp " *\\(def \\|clas\\|#hea\\)")
-	       (hide-sublevels 1)))
   )
 
 (defun k/org()
@@ -429,6 +405,102 @@
     )
   )
 
+(defun k/python()
+  "python mode. "
+  (interactive)
+  (require 'python-mode)
+  (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
+  (add-to-list 'interpreter-mode-alist '("python" . python-mode))
+
+  (require 'smart-operator)
+  (add-hook 'python-mode-hook
+	    (lambda ()
+	      (set-variable 'py-indent-offset 2)
+	      (set-variable 'indent-tabs-mode nil)
+	      (define-key py-mode-map (kbd "RET") 'newline-and-indent)
+	      (smart-operator-mode-on)
+	      ))
+
+  ;; pymacs / rope
+  (autoload 'pymacs-apply "pymacs")
+  (autoload 'pymacs-call "pymacs")
+  (autoload 'pymacs-eval "pymacs")
+  (autoload 'pymacs-exec "pymacs")
+  (autoload 'pymacs-load "pymacs")
+
+  (pymacs-load "ropemacs" "rope-")
+  (setq ropemacs-enable-autoimport t)
+
+  ;; autocomplete.el
+  (require 'auto-complete)
+  (defun prefix-list-elements (list prefix)
+    (let (value)
+      (nreverse
+       (dolist (element list value)
+	 (setq value (cons (format "%s%s" prefix element) value))))))
+
+  (defvar ac-source-rope
+    '((candidates
+       . (lambda ()
+	   (prefix-list-elements (rope-completions) ac-target))))
+    "Source for Rope")
+
+  (defun ac-python-find ()
+    "Python `ac-find-function'."
+    (require 'thingatpt)
+    (let ((symbol (car-safe (bounds-of-thing-at-point 'symbol))))
+      (if (null symbol)
+	  (if (string= "." (buffer-substring (- (point) 1) (point)))
+	      (point)
+	    nil)
+	symbol)))
+
+  (defun ac-python-candidate ()
+    "Python `ac-candidates-function'"
+    (let (candidates)
+      (dolist (source ac-sources)
+	(if (symbolp source)
+	    (setq source (symbol-value source)))
+	(let* ((ac-limit (or (cdr-safe (assq 'limit source)) ac-limit))
+	       (requires (cdr-safe (assq 'requires source)))
+	       cand)
+	  (if (or (null requires)
+		  (>= (length ac-target) requires))
+	      (setq cand
+		    (delq nil
+			  (mapcar (lambda (candidate)
+				    (propertize candidate 'source source))
+				  (funcall (cdr (assq 'candidates source)))))))
+	  (if (and (> ac-limit 1)
+		   (> (length cand) ac-limit))
+	      (setcdr (nthcdr (1- ac-limit) cand) nil))
+	  (setq candidates (append candidates cand))))
+      (delete-dups candidates)))
+
+  (add-hook 'python-mode-hook
+	    (lambda ()
+	      (auto-complete-mode 1)
+	      (set (make-local-variable 'ac-sources)
+		   (append ac-sources '(ac-source-rope) '(ac-source-yasnippet)))
+	      (set (make-local-variable 'ac-find-function) 'ac-python-find)
+	      (set (make-local-variable 'ac-candidate-function) 'ac-python-candidate)
+	      (set (make-local-variable 'ac-auto-start) nil)))
+
+  ;; ryan' python tab completion
+  (defun ryan-python-tab ()
+    (interactive)
+    (if (eql (ac-start) 0)
+	(indent-for-tab-command)))
+
+  (defadvice ac-start (before advice-turn-on-auto-start activate)
+    (set (make-local-variable 'ac-auto-start) t))
+
+  (defadvice ac-cleanup (after advice-turn-off-auto-start activate)
+    (set (make-local-variable 'ac-auto-start) nil))
+
+  (define-key py-mode-map "\t" 'ryan-python-tab)
+  )
+
 ;;; k/func
 (defun k/func()
   (interactive)
@@ -436,7 +508,6 @@
   (k/ui)
   (k/cth)
   (k/macos)
-  (k/out)
   (k/dired)
   (k/file)
   (k/org)
@@ -446,11 +517,11 @@
   (k/yas)
   (k/tex)
   (k/textile)
-  (k/company)
   (k/perl)
   (k/plsql)
   (k/lua)
 )
+
 
 (k/func)
 ;;; emacs.el ends here
