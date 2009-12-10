@@ -524,4 +524,5 @@
 
 
 (k/func)
+
 ;;; emacs.el ends here
