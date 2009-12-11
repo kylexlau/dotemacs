@@ -44,21 +44,20 @@
 	))
 
 ;;; pymacs
-;(require 'pymacs)
+
 (autoload 'pymacs-apply "pymacs")
 (autoload 'pymacs-call "pymacs")
 (autoload 'pymacs-eval "pymacs" nil t)
 (autoload 'pymacs-exec "pymacs" nil t)
 (autoload 'pymacs-load "pymacs" nil t)
 
-;;(eval-after-load "pymacs"
-;;  '(add-to-list 'pymacs-load-path YOUR-PYMACS-DIRECTORY"))
 (pymacs-load "ropemacs" "rope-")
 (setq ropemacs-enable-autoimport t)
 
 ;;; yasnippet
 (require 'yasnippet)
 (yas/initialize)
+(setq yas/trigger-key (kbd "C-c <kp-multiply>"))
 (yas/load-directory "~/prj/emacs/elisp/snippets")
 (setq yas/prompt-functions '(yas/dropdown-prompt
 			     yas/completing-prompt
@@ -78,6 +77,7 @@
 ;;   2) Yasnippet
 ;;   all with AutoComplete.el
 (require 'auto-complete)
+(require 'auto-complete-config)
 (require 'auto-complete-yasnippet)
 
 (defun prefix-list-elements (list prefix)
@@ -134,30 +134,31 @@
 
 ;;; tab completion
 ;; Ryan's python specific tab completion
-;; (defun ryan-python-tab ()
-;;   ; Try the following:
-;;   ; 1) Do a yasnippet expansion
-;;   ; 2) Do a Rope code completion
-;;   ; 3) Do an indent
-;;   (interactive)
-;;   (if (eql (ac-start) 0)
-;;       (indent-for-tab-command)))
+(defun ryan-python-tab ()
+  ; Try the following:
+  ; 1) Do a yasnippet expansion
+  ; 2) Do a Rope code completion
+  ; 3) Do an indent
+  (interactive)
+  (if (eql (ac-start) 0)
+      (indent-for-tab-command)))
 
-;; (defadvice ac-start (before advice-turn-on-auto-start activate)
-;;   (set (make-local-variable 'ac-auto-start) t))
-;; (defadvice ac-cleanup (after advice-turn-off-auto-start activate)
-;;   (set (make-local-variable 'ac-auto-start) nil))
-;; (define-key py-mode-map "\t" 'ryan-python-tab)
-(require 'pycomplete)
+(defadvice ac-start (before advice-turn-on-auto-start activate)
+  (set (make-local-variable 'ac-auto-start) t))
+(defadvice ac-cleanup (after advice-turn-off-auto-start activate)
+  (set (make-local-variable 'ac-auto-start) nil))
+(define-key py-mode-map "\t" 'ryan-python-tab)
+
+;; (require 'pycomplete)
 
 ;;; company mode
-(autoload 'company-mode "company" nil t)
+(require 'company-pysmell)
+(autoload 'company-mode "company" "company mode." t)
 (setq company-idle-delay t)
-(setq company-idle-delay 0.05)
+(setq company-idle-delay 0.005)
 (setq company-minimum-prefix-length 1)
 (setq company-show-numbers 1)
 
-;; company mode on
 (dolist (hook (list
 	       'emacs-lisp-mode-hook
 	       'lisp-mode-hook
@@ -193,4 +194,17 @@
 
 (add-hook 'find-file-hook 'flymake-find-file-hook)
 
+;;; outline minor mode
+(require 'outline)
+(define-key outline-minor-mode-map (kbd "\C-c <tab>") 'org-cycle)
+(define-key outline-minor-mode-map (kbd "\C-u <tab>") 'org-shifttab)
+
+(dolist (hook (list
+	       'emacs-lisp-mode-hook
+	       'python-mode-hook
+	       ))
+  (add-hook hook 'outline-minor-mode))
+
 (provide 'pyide)
+
+;;; pyide.el ends here.

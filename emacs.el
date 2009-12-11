@@ -1,6 +1,6 @@
 ;;; keybinding
+(global-set-key (kbd "C-c o") 'speedbar-select-attached-frame)
 (global-set-key (kbd "C-=") 'hippie-expand)
-(global-set-key (kbd "C-c o") 'speedbar-get-focus)
 
 ;;; my variables
 (defvar ntp (string= "windows-nt" (symbol-name system-type))
@@ -22,7 +22,7 @@
     (defun my-non-fullscreen ()
       (interactive)
       (if (fboundp 'w32-send-sys-command)
-0	  ;; WM_SYSCOMMAND restore #xf120
+	  ;; WM_SYSCOMMAND restore #xf120
 	  (w32-send-sys-command 61728)
 	(progn (set-frame-parameter nil 'width 82)
 	       (set-frame-parameter nil 'fullscreen 'fullheight))))
@@ -62,7 +62,12 @@
   " init my configuration. "
   (interactive)
   ;; server
-  (server-start)
+
+  ;; fix ~/.emacs.d/server is unsafe on w32
+  (when (and (= emacs-major-version 23) (equal window-system 'w32))
+    (defun server-ensure-safe-dir (dir) "Noop" t))
+
+  ;; (server-start)
 
   ;; load path
   (add-to-list 'load-path "~/.emacs.d/elisp")
@@ -128,14 +133,23 @@
 
   ;; font
   (when macosp (set-frame-font "Courier New-14"))
-  (when ntp (set-frame-font "Consolas-12"))
-  (when linuxp (set-frame-font "Consolas-8")) ; small font for my eeepc 1000he
+  (when ntp (set-frame-font "Consolas-11"))
+  (when linuxp 
+    (set-frame-font "Consolas-8")
 
-  (when ntp (set-frame-font "Consolas-12")
-	(setq default-frame-alist 
-	      '((width . 80)
-		(height . 24)
-		(font . "Consolas-12"))))
+    (setq default-frame-alist
+	  '(
+	    (top . 0) (left . 0)
+	    (width . 80) (height . 25)
+	    (font . "Consolas-8")))
+	) ; small font for my eeepc 1000he
+
+  (when ntp 
+    (set-frame-font "Consolas-12")
+    (setq default-frame-alist 
+	  '((width . 80)
+	    (height . 30)
+	    (font . "Consolas-12"))))
 
   (when macosp
     (set-fontset-font (frame-parameter nil 'font)
@@ -145,18 +159,13 @@
   (when linuxp
     (set-fontset-font (frame-parameter nil 'font)
 		      'han '("WenQuanYi Zen Hei" . "unicode-bmp"))
-    (setq default-frame-alist
-	  '(
-	  (top . 0) (left . 0)
-	  (width . 80) (height . 24)
-	  (font . "Consolas-8")))
     )
 
   (when macosp
     (setq default-frame-alist
 	  '(
 	    ;;(top . 0) (left . 0)
-	    (width . 80) (height . 24)
+	    (width . 80) (height . 40)
 	    (font . "Courier New-14"))))
 
   ;; frame title
@@ -190,18 +199,6 @@
   ;; yes/no to y/n
   (fset 'yes-or-no-p 'y-or-n-p)
   (set-variable 'confirm-kill-emacs 'yes-or-no-p)
-  )
-
-(defun k/out()
-  "outline related."
-  (interactive)
-
-  (require 'outline)
-
-  (define-key outline-minor-mode-map (kbd "<tab>") 'org-cycle)
-  (define-key outline-minor-mode-map (kbd "\C-u <tab>") 'org-shifttab)
-
-  (add-hook 'emacs-lisp-mode-hook 'outline-minor-mode)
   )
 
 (defun k/org()
@@ -242,7 +239,12 @@
     (setq org-remember-templates
 	  '(
 	    ("Diary" ?d "* %U %? :DIARY: \n"  "~/Dropbox/gtd/diary.txt")
-	    ("Notes" ?n "* %U %^{Title} :NOTES: \n %?" "~/Dropbox/gtd/diary.txt")
+	    ("Review" ?r "* %U Daily Review :DR: \n%[~/.daily_review.txt]\n" "~/Dropbox/gtd/diary.txt")
+	    ("Book" ?b "* %U %^{Title} :READING: \n%[~/.booktemp.txt]\n" "~/Dropbox/gtd/diary.txt")
+	    ("Film" ?f "* %U %^{Title} :FILM: \n%[~/.film_temp.txt]\n" "~/Dropbox/gtd/diary.txt")
+	    ("Clipboard" ?c "* %U %^{Headline} %^g\n%c\n%?"  "~/Dropbox/gtd/diary.txt")
+	    ("Notes" ?n "* %U %^{Title} :NOTES \n %?" "~/Dropbox/gtd/diary.txt")
+	    ("TODO" ?t "** TODO %? \nAdded @ %T" "~/Dropbox/gtd/gtd.txt" "Tasks")
 	    )))
 
   ;; for Windows
@@ -284,13 +286,8 @@
   )
 
 ;;; extensions
-(defun k/cth()
-  " color-theme. "
-  (interactive)
-  (when (k/check-file "color-theme.el")
-    (require 'color-theme)
-    (color-theme-clarity))
-)
+(require 'color-theme)
+(color-theme-clarity))
 
 (defun k/web()
   " web development. "
@@ -338,7 +335,7 @@
   "Company.el."
   (interactive)
   (when (k/check-file "company.el")
-    (autoload 'company-mode "company" nil t)
+    (autoload 'company-mode "company" "company mode." t)
     (setq company-idle-delay t)
     (setq company-idle-delay 0.2)
     (setq company-minimum-prefix-length 1)
@@ -376,39 +373,14 @@
     (setq plsql-indent 2)
     ))
 
-(defun k/go()
-  "go programming language."
+(defun k/lua()
+  "lua mode."
   (interactive)
-  (when (k/check-file "go-mode-load.el")
-    (require 'go-mode-load)
-    ))
-
-(defun k/ruby()
-  "Ruby programming."
-  (interactive)
-  (when (k/check-file "ruby-mode.el")
-    (autoload 'ruby-mode "ruby-mode" "Major mode for ruby files" t)
-    (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
-    (add-to-list 'interpreter-mode-alist '("ruby" . ruby-mode))
-    )
-  
-  (when (k/check-file "ruby-electric.el")
-    (autoload 'ruby-electric-mode "ruby-electric" "mode for ruby" t)
-    )
-
-  ;; ri_repl in path
-  (when (k/check-file "ri.el")
-    (autoload 'ri "ri" "mode for ruby ri tool" t)
-    )
-
-  (when (k/check-file "inf-ruby.el")
-    (autoload 'run-ruby "inf-ruby" "Run an inferior Ruby process" t)
-    (autoload 'inf-ruby-keys "inf-ruby" "Set local key defs for inf-ruby in ruby-mode" t)
-    (add-hook 'ruby-mode-hook
-	      '(lambda ()
-		 (inf-ruby-keys)
-		 (ruby-electric-mode)
-		 ))
+  (when (k/check-file "lua-mode.el")
+    (autoload 'lua-mode "lua-mode" "Lua editing mode." t)
+    (setq auto-mode-alist 
+	  (cons '("\\.lua$" . lua-mode) auto-mode-alist))
+    (add-hook 'lua-mode-hook 'hs-minor-mode)
     )
   )
 
@@ -419,7 +391,6 @@
   (k/ui)
   (k/cth)
   (k/macos)
-  (k/out)
   (k/dired)
   (k/file)
   (k/org)
@@ -428,15 +399,12 @@
   (k/web)
   (k/tex)
   (k/textile)
-  (k/company)
   (k/perl)
   (k/plsql)
-  (k/go)
-  (k/ruby)
+  (k/lua)
 )
 
 (k/func)
 
 (load-library 'pyide)
-
 ;;; emacs.el ends here
