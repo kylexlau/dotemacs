@@ -289,7 +289,6 @@
   (interactive)
   (when (k/check-file "color-theme.el")
     (require 'color-theme)
-    (color-theme-initialize)
     (color-theme-clarity))
 )
 
@@ -314,21 +313,6 @@
   (autoload 'markdown-mode "markdown")
   (add-to-list 'auto-mode-alist '("\\.text$" . markdown-mode))
   )
-
-(defun k/yas()
-  " yasnippet. "
-  (interactive)
-  (when (k/check-file "yasnippet.el")
-    (require 'yasnippet)
-    (yas/initialize)
-    (yas/load-directory "~/prj/emacs/elisp/snippets")
-    (setq yas/prompt-functions '(yas/dropdown-prompt
-				 yas/completing-prompt
-				 yas/ido-prompt
-				 yas/x-prompt
-				 yas/no-prompt))
-
-    ))
 
 (defun k/tex()
   "LaTeX."
@@ -442,7 +426,6 @@
 
   (k/full)
   (k/web)
-  (k/yas)
   (k/tex)
   (k/textile)
   (k/company)
@@ -453,4 +436,7 @@
 )
 
 (k/func)
+
+(load-library 'pyide)
+
 ;;; emacs.el ends here
