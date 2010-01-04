@@ -3,11 +3,14 @@
 (progn (cd "~/prj/emacs/elisp")
        (normal-top-level-add-subdirs-to-load-path))
 
-(load-library "kxl-base")
-(load-library "kxl-font")
-(load-library "kxl-func")
-(load-library "kxl-org")
-(load-library "kxl-py")
-(load-library "kxl-key")
+(load-library "base")
+(load-library "font")
+(load-library "func")
+(load-library "org")
+
+(when (not cygwinp)
+  (load-library "python"))
+
+(load-library "keybinding")
 
 (message-box "all library loaded...")

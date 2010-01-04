@@ -4,7 +4,8 @@
 (add-hook 'org-mode-hook
 	  (lambda ()
 	    (auto-fill-mode 1)
-	    (flyspell-mode 1)  ; turn on will make typing slow on MacOSX
+	    (when linuxp
+	      (flyspell-mode 1))
 	    (outline-minor-mode 1)
 	    (setq show-trailing-whitespace nil) ; don't need on org-mode
 	    ))
@@ -24,13 +25,14 @@
 (setq remember-handler-functions '(org-remember-handler))
 (add-hook 'remember-mode-hook 'org-remember-apply-template)
 
-(when (not ntp)
+(when ntp
   (setq org-directory "~/Dropbox/gtd/")
   (setq org-agenda-files (quote ("~/Dropbox/gtd/gtd.txt" "~/Dropbox/gtd/diary.txt")))
   )
 
+
 ;; template
-(when (not ntp)
+(when ntp
   (setq org-remember-templates
 	'(
 	  ("Diary" ?d "* %U %? :DIARY: \n"  "~/Dropbox/gtd/diary.txt")
