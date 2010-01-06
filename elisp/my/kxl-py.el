@@ -192,7 +192,7 @@
   (add-to-list 'flymake-allowed-file-name-masks
 	       '("\\.py\\'" flymake-pyflakes-init)))
 
-(add-hook 'find-file-hook 'flymake-find-file-hook)
+;(add-hook 'find-file-hook 'flymake-find-file-hook)
 
 ;;; outline minor mode
 (require 'outline)

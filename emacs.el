@@ -8,6 +8,8 @@
 (load-library "kxl-func")
 (load-library "kxl-org")
 (load-library "kxl-py")
+(load-library "kxl-tex")
 (load-library "kxl-key")
+
 
 (message-box "all library loaded...")

@@ -35,3 +35,10 @@
 (defun k/check-file(file)
   "check if a file is in load-path."
   (locate-file file load-path))
+
+;; (defun alpha()
+;; (let ((p (string-to-int (read-string "Foo: " nil 'my-history))))
+;;   (message (int-to-string p))
+;;   (modify-frame-parameters (selected-frame)
+;; 			   '((alpha . 80)))
+;;   )

@@ -31,9 +31,9 @@
 (setq frame-title-format
       '("Emacs@%b " (buffer-file-name ("("buffer-file-name")"))))
 
-;; transparency 90%
+;; transparency
 (modify-frame-parameters (selected-frame)
-			 '((alpha . 90)))
+			 '((alpha . 85)))
 
 (column-number-mode 1)
 (size-indication-mode 1)
@@ -80,5 +80,4 @@
 (setq dired-recursive-copies 'top)
 (setq dired-recursive-deletes 'top)
 (setq dired-dwim-target t)
-
 

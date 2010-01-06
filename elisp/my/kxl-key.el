@@ -9,3 +9,9 @@
 
 (define-key outline-minor-mode-map (kbd "\C-c <tab>") 'org-cycle)
 (define-key outline-minor-mode-map (kbd "\C-u <tab>") 'org-shifttab)
+
+(global-set-key (kbd "\C-c s") 'ispell-word)
+
+(global-set-key [f7] 'etexshow)
+(add-hook 'etexshow-mode-hook '(lambda () 
+				 (local-set-key [f7] 'etexshow-quit)))

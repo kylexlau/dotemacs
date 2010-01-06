@@ -33,7 +33,7 @@
 (when (not ntp)
   (setq org-remember-templates
 	'(
-	  ("Diary" ?d "* %U %? :DIARY: \n"  "~/Dropbox/gtd/diary.txt")
+	  ("Diary" ?d "* %U %& %? :DIARY: \n"  "~/Dropbox/gtd/diary.txt")
 	  ("Review" ?r "* %U Daily Review :DR: \n%[~/.daily_review.txt]\n" "~/Dropbox/gtd/diary.txt")
 	  ("Book" ?b "* %U %^{Title} :READING: \n%[~/.booktemp.txt]\n" "~/Dropbox/gtd/diary.txt")
 	  ("Film" ?f "* %U %^{Title} :FILM: \n%[~/.film_temp.txt]\n" "~/Dropbox/gtd/diary.txt")
