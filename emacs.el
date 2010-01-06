@@ -12,5 +12,6 @@
   (load-library "python"))
 
 (load-library "keybinding")
+(load-library "tex")
 
 (message-box "all library loaded...")
