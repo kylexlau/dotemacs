@@ -155,8 +155,9 @@
 (require 'company-pysmell)
 (autoload 'company-mode "company" "company mode." t)
 (setq company-idle-delay t)
-(setq company-idle-delay 0.005)
-(setq company-minimum-prefix-length 1)
+(setq company-idle-delay 0.3)
+(setq company-echo-delay 0.3)
+(setq company-minimum-prefix-length 4)
 (setq company-show-numbers 1)
 
 (dolist (hook (list
@@ -174,7 +175,6 @@
 	       'python-mode
 	       ))
   (add-hook hook 'company-mode))
-
 
 (require 'pysmell)
 (require 'company-ropemacs)

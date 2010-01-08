@@ -3,15 +3,17 @@
 (progn (cd "~/prj/emacs/elisp")
        (normal-top-level-add-subdirs-to-load-path))
 
-(load-library "base")
-(load-library "font")
-(load-library "func")
-(load-library "org")
+(defun load-my (lib)
+  (load-file (concat "~/prj/emacs/elisp/my/" lib ".el"))
+  )
+
+(load-my "base")
+(load-my "font")
+(load-my "func")
+(load-my "org")
 
 (when (not cygwinp)
-  (load-library "python"))
+  (load-my "python"))
 
-(load-library "keybinding")
-(load-library "tex")
-
-(message-box "all library loaded...")
+(load-my "keybinding")
+(load-my "tex")

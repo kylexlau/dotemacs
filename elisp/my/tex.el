@@ -13,9 +13,9 @@
 ;; auctex
 (load "auctex.el" nil t t)
 (load "preview-latex.el" nil t t)
-(add-to-list 'auto-mode-alist '("\\.tex\\'" . LaTeX-mode))
+(add-to-list 'auto-mode-alist '("\\.tex\\'" . plain-tex-mode))
 
-(add-hook 'LaTeX-mode-hook
+(add-hook 'plain-tex-mode-hook
 	  '(lambda() 
 	     (outline-minor-mode 1)
 	     (auto-fill-mode 1)
