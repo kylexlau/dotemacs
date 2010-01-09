@@ -26,12 +26,12 @@
 (add-hook 'remember-mode-hook 'org-remember-apply-template)
 
 (setq org-directory "~/Dropbox/gtd/")
-(setq org-agenda-files (quote ("~/Dropbox/gtd/gtd.txt" "~/Dropbox/gtd/diary.txt")))
+(setq org-agenda-files (quote ("~/Dropbox/gtd/diary.txt" "~/Dropbox/gtd/todo.txt")))
 
 ;; template
 (setq org-remember-templates
       '(
 	("Diary" ?d "* %U %? :DIARY: \n"  "~/Dropbox/gtd/diary.txt")
-	("TODO"  ?t "* %U %^{What}  :TODO: \n" "~/Dropbox/gtd/diary.txt")
 	("Notes" ?n "* %U %^{Title} :NOTES: \n " "~/Dropbox/gtd/diary.txt")
+	("TODO"  ?t "* TODO %?\nAdded %T" "~/Dropbox/gtd/todo.txt")
 	))

@@ -13,16 +13,18 @@
 ;; auctex
 (load "auctex.el" nil t t)
 (load "preview-latex.el" nil t t)
-(add-to-list 'auto-mode-alist '("\\.tex\\'" . plain-tex-mode))
+(add-to-list 'auto-mode-alist '("\\.tex\\'" . context-en-mode))
 
 (add-hook 'plain-tex-mode-hook
 	  '(lambda() 
 	     (outline-minor-mode 1)
 	     (auto-fill-mode 1)
+	     (flyspell-mode 1)
 	     ))
 
 (add-hook 'context-en-mode-hook
 	  '(lambda() 
 	     (outline-minor-mode 1)
 	     (auto-fill-mode 1)
+	     (flyspell-mode 1)
 	     ))

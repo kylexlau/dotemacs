@@ -10,7 +10,7 @@
 (load-my "base")
 (load-my "font")
 (load-my "func")
-(load-my "org")
+(load-my "orgmode")
 
 (when (not cygwinp)
   (load-my "python"))
