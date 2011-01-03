@@ -64,6 +64,7 @@
 ;; ido
 (require 'ido)
 (ido-mode 1)
+(setq tramp-mode nil)
 
 ;; desktop
 (require 'desktop)

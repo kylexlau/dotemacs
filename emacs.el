@@ -1,19 +1,14 @@
-(add-to-list 'load-path "~/prj/emacs/elisp")
-
-(progn (cd "~/prj/emacs/elisp")
+(progn (cd "d:/repo/emacs/")
        (normal-top-level-add-subdirs-to-load-path))
 
-(defun load-my (lib)
-  (load-file (concat "~/prj/emacs/elisp/my/" lib ".el"))
-  )
+(load "base")
+(load "font")
+(load "func")
+;(load "keybinding")
+(load "orgmode")
 
-(load-my "base")
-(load-my "font")
-(load-my "func")
-(load-my "orgmode")
+;(when (not cygwinp)
+;  (load-my "python"))
 
-(when (not cygwinp)
-  (load-my "python"))
 
-(load-my "keybinding")
-(load-my "tex")
+;(load "tex")
