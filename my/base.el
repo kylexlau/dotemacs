@@ -76,15 +76,11 @@
 (setq desktop-restore-eager 50)
 
 ;; dired
-(require 'dired-x)
+(add-hook 'dired-load-hook '(lambda () (require 'dired-x)))
+(setq dired-omit-files-p t)
+(setq dired-omit-files
+          (concat dired-omit-files "\\|^\\..+$"))
 
-(dired-omit-mode 1)
-(setq dired-omit-files "^#\\|^\\..*")
-(setq dired-omit-extensions
-      '(".svn/" "CVS/" ".o" "~" ".bin" ".lbin"
-	".so" ".a" ".ln" ".log" ".aux" ".toc" ".out"))
-
-(setq dired-guess-shell-gnutar "gtar")
 (setq dired-recursive-copies 'top)
 (setq dired-recursive-deletes 'top)
 (setq dired-dwim-target t)
