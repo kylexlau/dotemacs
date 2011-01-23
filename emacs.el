@@ -1,14 +1,15 @@
-(progn (cd "d:/repo/emacs/")
+(progn (cd "~/repo/emacs/")
        (normal-top-level-add-subdirs-to-load-path))
 
 (load "base")
 (load "font")
 (load "func")
-;(load "keybinding")
+(load "keybinding")
 (load "orgmode")
 
-;(when (not cygwinp)
-;  (load-my "python"))
+;;; markdown
+(autoload 'markdown-mode "markdown-mode.el"
+  "Major mode for editing Markdown files" t)
 
+(push '("\\.md" . markdown-mode) auto-mode-alist)
 
-;(load "tex")

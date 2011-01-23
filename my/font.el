@@ -12,16 +12,16 @@
   )
 
 (when linuxp 
-  (set-frame-font "Consolas-8")
+  (set-frame-font "DejaVu Sans Mono-10.5")
   
   (set-fontset-font (frame-parameter nil 'font)
-		    'han '("WenQuanYi Zen Hei" . "unicode-bmp"))
+		    'han '("Microsoft YaHei-10.5" . "unicode-bmp"))
 
   (setq default-frame-alist
 	'(
 	  (top . 0) (left . 0)
 	  (width . 80) (height . 25)
-	  (font . "Consolas-8")))
+	  (font . "DejaVu Sans Mono-10.5")))
   )
 
 (when ntp 
