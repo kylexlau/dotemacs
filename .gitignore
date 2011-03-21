@@ -1,2 +1,2 @@
-emacs.el~
-.emacs.desktop*
+backups/*
+my/local.el
