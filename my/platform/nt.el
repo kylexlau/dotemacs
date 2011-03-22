@@ -1,6 +1,8 @@
+(add-to-list 'load-path (concat emacs-el-dir "/elisp"))
+
 (set-frame-font "Consolas-10.5")
 
-(setq default-frame-alist 
+(setq default-frame-alist
       '((width . 80)
 	(height . 25)
 	(font . "Consolas-10.5")))
