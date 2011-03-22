@@ -1,2 +1,4 @@
 backups/*
 my/local.el
+*~
+*elc

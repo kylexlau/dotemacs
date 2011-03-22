@@ -18,12 +18,6 @@
 (defvar cygwinp (string= "cygwin" (symbol-name system-type))
   "If Emacs runs on a Cygwin platform.")
 
-(cond
-  (ntp (load "my/platform/nt"))
-  (linuxp (load "my/platform/linux"))
-  (macosp (load "my/platform/macos"))
-)
-
 ;; Load path
 (setq emacs-el-dir (file-name-directory (or (buffer-file-name) load-file-name))
       my-dir (concat emacs-el-dir "my")
@@ -32,6 +26,15 @@
 (add-to-list 'load-path emacs-el-dir)
 (add-to-list 'load-path my-dir)
 
+;; el-get to manage el packages
+(when (not ntp) (load "my/elget/el-get-init"))
+
+;; load platform config
+(cond
+  (ntp (load "my/platform/nt"))
+  (linuxp (load "my/platform/linux"))
+  (macosp (load "my/platform/macos"))
+)
 ;; load my configs
 (load "my/display")
 (load "my/defun")
@@ -39,16 +42,13 @@
 (load "my/backup")
 (load "my/binding")
 
-;; el-get to manage el packages
-(load "my/elget/el-get-init")
-
-;;; load languages configs
+;; load languages configs
 (mapc 'load
       (directory-files (concat my-dir "/lang") t ".*elc$"))
 
-;;; load mode configs
+;; load mode configs
 (mapc 'load
       (directory-files (concat my-dir "/mode") t ".*elc$"))
 
-;;; local settings
+;; local settings
 (if (file-exists-p (concat my-dir "/local.el")) (load "local"))
