@@ -3,14 +3,19 @@
 (setq el-get-sources
       '(
 	el-get
+
+;	dired-plus
+	ido-hacks
+
 	color-theme
         yaml-mode
         rvm
+	paredit
+	yasnippet
 
-        (:name ruby-mode        :type elpa)
-	(:name ruby-electric    :type elpa)
-        (:name ruby-compilation :type elpa)
-        (:name inf-ruby         :type elpa)
+	ruby-mode
+	ruby-electric
+	flymake-ruby
         ))
 
 (el-get 'sync)
