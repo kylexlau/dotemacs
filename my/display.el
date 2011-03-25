@@ -30,13 +30,13 @@
 (blink-cursor-mode 1)
 (setq-default cursor-type '(bar . 10))
 (setq-default indicate-empty-lines t)
+(setq-default show-trailing-whitespace t)
 
 ;;; variables
 (setq font-lock-maximum-decoration t
       debug-on-error t
       search-highlight t
       query-replace-highlight t
-      show-trailing-whitespace t
 
       use-dialog-box nil
       visible-bell t
