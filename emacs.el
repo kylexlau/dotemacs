@@ -42,13 +42,14 @@
 (load "my/backup")
 (load "my/binding")
 
-;; load languages configs
-(mapc 'load
-      (directory-files (concat my-dir "/lang") t ".*elc$"))
-
 ;; load mode configs
 (mapc 'load
       (directory-files (concat my-dir "/mode") t ".*elc$"))
 
+;; load languages configs
+(mapc 'load
+      (directory-files (concat my-dir "/lang") t ".*elc$"))
+
 ;; local settings
 (if (file-exists-p (concat my-dir "/local.el")) (load "local"))
+
