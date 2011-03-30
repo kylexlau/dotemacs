@@ -28,6 +28,9 @@
 (delete-selection-mode 1)
 
 (blink-cursor-mode 1)
+(set-fringe-style 1)
+
+;;; setq-default
 (setq-default cursor-type '(bar . 10))
 (setq-default indicate-empty-lines t)
 (setq-default show-trailing-whitespace t)

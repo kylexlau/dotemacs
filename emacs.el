@@ -27,7 +27,7 @@
 (add-to-list 'load-path my-dir)
 
 ;; el-get to manage el packages
-(when (not ntp) (load "my/elget/el-get-init"))
+(when (not ntp) (load "my/el-get/el-get-init"))
 
 ;; load platform config
 (cond

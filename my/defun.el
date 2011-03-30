@@ -1,4 +1,10 @@
-(defvar my-fullscreen-p t 
+(defun show-trailing-whitespace()
+  (interactive)
+  (setq show-trailing-whitespace t)
+  )
+
+;;; fullscreen for w32
+(defvar my-fullscreen-p t
   "Check if fullscreen is on or off")
 
 (defun my-non-fullscreen ()
@@ -16,6 +22,7 @@
       (w32-send-sys-command 61488)
     (set-frame-parameter nil 'fullscreen 'fullboth)))
 
+;;; fullscrenn for linux
 (defun my-toggle-fullscreen ()
   (interactive)
   (setq my-fullscreen-p (not my-fullscreen-p))
@@ -32,11 +39,17 @@
      '(2 "_NET_WM_STATE_FULLSCREEN" 0))
     ))
 
-(defun k/check-file(file)
-  "check if a file is in load-path."
-  (locate-file file load-path))
+;;; fullscreen function that can't get back
+(defun toggle-fullscreen (&optional f)
+  (interactive)
+  (let ((current-value (frame-parameter nil 'fullscreen)))
+    (set-frame-parameter nil 'fullscreen
+			 (if (equal 'fullboth current-value)
+			     (if (boundp 'old-fullscreen) old-fullscreen nil)
+			   (progn (setq old-fullscreen current-value)
+				  'fullboth)))))
 
-;;; Stefan Monnier <foo at acm.org>. It is the opposite of fill-paragraph    
+;;; Stefan Monnier <foo at acm.org>. It is the opposite of fill-paragraph
 (defun unfill-paragraph ()
   "Takes a multi-line paragraph and makes it into a single line
 of text."
@@ -51,12 +64,4 @@ text."
   (let ((fill-column (point-max)))
     (fill-region start end nil)))
 
-;;; can't get back
-(defun toggle-fullscreen (&optional f)
-  (interactive)
-  (let ((current-value (frame-parameter nil 'fullscreen)))
-    (set-frame-parameter nil 'fullscreen
-			 (if (equal 'fullboth current-value)
-			     (if (boundp 'old-fullscreen) old-fullscreen nil)
-			   (progn (setq old-fullscreen current-value)
-				  'fullboth)))))
+
