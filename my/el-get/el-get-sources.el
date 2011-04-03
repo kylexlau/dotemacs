@@ -1,8 +1,10 @@
-(add-to-list 'el-get-recipe-path (concat my-dir "/elget/recipes"))
+(add-to-list 'el-get-recipe-path (concat my-dir "/el-get/recipes"))
 
 (setq el-get-sources
       '(
         el-get
+
+	auctex
 
         ;; dired-plus
         ;; ido-hacks
@@ -21,6 +23,8 @@
         rvm
         css-mode
         emacs-textmate
+
+
         ))
 
 ;(el-get 'sync)
