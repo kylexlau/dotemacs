@@ -53,3 +53,4 @@
 ;; local settings
 (if (file-exists-p (concat my-dir "/local.el")) (load "local"))
 
+(server-start)
