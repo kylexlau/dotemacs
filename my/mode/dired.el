@@ -1,9 +1,5 @@
-;; Load Dired X when Dired is loaded.
-(add-hook 'dired-load-hook '(lambda () (require 'dired-x)))
-
-;; Enable toggling of uninteresting files.
-(setq dired-omit-files-p t)
-
+(require 'dired-x)
 (setq dired-omit-files
-          (concat dired-omit-files "\\|^\\..+$"))
+      (concat dired-omit-files "\\|^\\..+$"))
+(setq dired-omit-files-p t)
 
