@@ -4,6 +4,8 @@
       '(
         el-get
 
+	ecb
+
 	auctex
 
         ;; dired-plus
@@ -18,12 +20,14 @@
         ruby-electric
         ruby-compilation
         flymake-ruby
+	yari
+        rvm
+
         yaml-mode
         rhtml-mode
-        rvm
         css-mode
-        emacs-textmate
 
+        emacs-textmate
 
         ))
 
