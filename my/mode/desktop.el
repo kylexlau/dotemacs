@@ -1,0 +1,1 @@
+(desktop-save-mode t)
