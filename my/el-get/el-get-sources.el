@@ -22,6 +22,8 @@
         flymake-ruby
 	yari
         rvm
+	magit
+;	magithub
 
         yaml-mode
         rhtml-mode

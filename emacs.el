@@ -35,6 +35,7 @@
   (linuxp (load "my/platform/linux"))
   (macosp (load "my/platform/macos"))
 )
+
 ;; load my configs
 (load "my/display")
 (load "my/defun")
@@ -54,3 +55,4 @@
 (if (file-exists-p (concat my-dir "/local.el")) (load "local"))
 
 (server-start)
+
