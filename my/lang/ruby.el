@@ -17,3 +17,11 @@
 
 ;; ruby-electric-mode
 (add-hook 'ruby-mode-hook 'ruby-electric-mode)
+
+;; ruby outline
+(add-hook 'ruby-mode-hook
+	  '(lambda ()
+	     (outline-minor-mode)
+	     (setq outline-regexp " *\\(def \\|class\\|module\\)")
+	     (define-key ruby-mode-map "\t" 'org-cycle)))
+
