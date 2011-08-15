@@ -5,3 +5,4 @@
 (add-hook 'outline-minor-mode-hook
 	  (lambda ()
 	    (define-key outline-minor-mode-map "\t" 'org-cycle)))
+

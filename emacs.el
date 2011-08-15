@@ -42,8 +42,9 @@
 (load "my/misc")
 (load "my/backup")
 (load "my/binding")
+(load "my/ske")
 
-;; load mode configs
+;; baload mode configs
 (mapc 'load
       (directory-files (concat my-dir "/mode") t ".*elc$"))
 

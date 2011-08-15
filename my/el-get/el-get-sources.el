@@ -31,6 +31,11 @@
 
         emacs-textmate
 
+	textile-mode
+
+	haml-mode
+	scss-mode
+;	sass-mode
         ))
 
 ;(el-get 'sync)
