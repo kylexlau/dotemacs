@@ -1,4 +1,4 @@
-(add-to-list 'el-get-recipe-path (concat my-dir "/el-get/recipes"))
+(add-to-list 'el-get-recipe-path (concat dotemacs-my-dir "/el-get/recipes"))
 
 (setq el-get-sources
       '(

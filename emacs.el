@@ -19,12 +19,13 @@
   "If Emacs runs on a Cygwin platform.")
 
 ;; Load path
-(setq emacs-el-dir (file-name-directory (or (buffer-file-name) load-file-name))
-      my-dir (concat emacs-el-dir "my")
-)
+(setq dotemacs-dir (file-name-directory (or (buffer-file-name) load-file-name)))
+(setq dotemacs-my-dir (concat dotemacs-dir "my"))
+(setq dotemacs-elisp-dir (concat dotemacs-dir "elisp"))
 
-(add-to-list 'load-path emacs-el-dir)
-(add-to-list 'load-path my-dir)
+(add-to-list 'load-path dotemacs-dir)
+(add-to-list 'load-path dotemacs-my-dir)
+(add-to-list 'load-path dotemacs-elisp-dir)
 
 ;; el-get to manage el packages
 (when (not ntp) (load "my/el-get/el-get-init"))
@@ -46,14 +47,14 @@
 
 ;; baload mode configs
 (mapc 'load
-      (directory-files (concat my-dir "/mode") t ".*elc$"))
+      (directory-files (concat dotemacs-my-dir "/mode") t ".*elc$"))
 
 ;; load languages configs
 (mapc 'load
-      (directory-files (concat my-dir "/lang") t ".*elc$"))
+      (directory-files (concat dotemacs-my-dir "/lang") t ".*elc$"))
 
 ;; local settings
-(if (file-exists-p (concat my-dir "/local.el")) (load "local"))
+(if (file-exists-p (concat dotemacs-my-dir "/local.el")) (load "local"))
 
 (server-start)
 

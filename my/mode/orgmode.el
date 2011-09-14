@@ -35,5 +35,3 @@
 	("Notes" ?n "* %U %^{Title} :NOTES: \n " "~/Dropbox/gtd/diary.txt")
 	("TODO"  ?t "* TODO %?\nAdded %T" "~/Dropbox/gtd/todo.txt")
 	))
-
-
