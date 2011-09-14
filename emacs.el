@@ -41,7 +41,6 @@
 (load "my/display")
 (load "my/defun")
 (load "my/misc")
-(load "my/backup")
 (load "my/binding")
 (load "my/ske")
 
