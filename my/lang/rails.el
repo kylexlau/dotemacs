@@ -1,5 +1,4 @@
 ;; tabs
-(setq-default tab-width 2)
 (setq-default indent-tabs-mode nil)
 
 (add-to-list 'auto-mode-alist '("Capfile" . ruby-mode))
@@ -14,6 +13,7 @@
 (add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode))
 
 (add-hook 'ruby-mode-hook '(lambda ()
+			     (setq tab-width 2)
                              (setq ruby-deep-arglist t)
                              (setq ruby-deep-indent-paren nil)
                              (setq c-tab-always-indent nil)
