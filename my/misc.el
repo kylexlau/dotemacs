@@ -26,3 +26,17 @@
 ;; i'm not a novice anymore.
 (setq disabled-command-function nil)
 
+;; backup files
+(setq
+ backup-by-copying t
+ delete-old-versions t
+ kept-new-versions 6
+ kept-old-versions 2
+ version-control t)
+
+(setq emacs-temporary-file-directory
+      (expand-file-name "~/.emacs.d/tmp"))
+(setq backup-directory-alist
+      `((".*" . ,emacs-temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,emacs-temporary-file-directory t)))
