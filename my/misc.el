@@ -1,3 +1,7 @@
+;; linum-mode
+(dolist (mode-hook '(ruby-mode-hook emacs-lisp-mode-hook))
+  (add-hook mode-hook (lambda() (linum-mode 1))))
+
 ;; custom file
 (setq custom-file (expand-file-name "custom.el"
 				    dotemacs-my-dir))
