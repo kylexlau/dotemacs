@@ -1,5 +1,8 @@
 ;; linum-mode
-(dolist (mode-hook '(ruby-mode-hook emacs-lisp-mode-hook))
+(dolist (mode-hook '(ruby-mode-hook
+		     emacs-lisp-mode-hook
+		     sql-mode-hook
+		     ))
   (add-hook mode-hook (lambda() (linum-mode 1))))
 
 ;; custom file
