@@ -13,4 +13,6 @@
 
 (setq package-archives
       '(("original" . "http://tromey.com/elpa/")
-        ("gnu" . "http://elpa.gnu.org/packages/")))
+        ("gnu" . "http://elpa.gnu.org/packages/")
+        ("marmalade" . "http://marmalade-repo.org/packages/")
+	))
