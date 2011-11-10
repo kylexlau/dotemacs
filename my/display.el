@@ -1,6 +1,6 @@
 ;;; color-theme
-(require 'color-theme)
-(color-theme-clarity)
+;(require 'color-theme)
+;(color-theme-clarity)
 
 ;;; frame title
 (when window-system
