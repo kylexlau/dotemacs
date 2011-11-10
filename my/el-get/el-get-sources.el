@@ -4,6 +4,7 @@
       '(
 	el-get paredit
 	ruby-mode ruby-electric ruby-compilation flymake-ruby
+	rinari				; Rinari Is Not A Rails IDE
 	))
 
 (el-get 'wait)
