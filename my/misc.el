@@ -1,3 +1,8 @@
+;; custom file
+(setq custom-file (expand-file-name "custom.el"
+				    dotemacs-my-dir))
+(load custom-file)
+
 ;; user info
 (setq user-full-name "kyle x lau")
 (setq user-mail-address "kylexlau@gmail.com")
