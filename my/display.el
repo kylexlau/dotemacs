@@ -9,9 +9,9 @@
   ;; (mouse-wheel-mode 1)
   )
 
-;;; transparency 90%
+;;; transparency
 (modify-frame-parameters (selected-frame)
-			 '((alpha . 90)))
+			 '((alpha . 95)))
 
 ;;; minor modes
 (global-font-lock-mode 1)
