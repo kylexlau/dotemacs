@@ -1,7 +1,10 @@
 ;; linum-mode
 (dolist (mode-hook '(ruby-mode-hook
+		     python-mode-hook
 		     emacs-lisp-mode-hook
 		     sql-mode-hook
+		     c-mode-hook
+		     c++-mode-hook
 		     ))
   (add-hook mode-hook (lambda() (linum-mode 1))))
 
