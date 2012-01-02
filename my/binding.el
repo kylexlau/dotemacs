@@ -14,3 +14,6 @@
 
 ;; completion
 (global-set-key (kbd "C-=") 'hippie-expand)
+
+;; compile
+(global-set-key "\C-xc" 'compile)
