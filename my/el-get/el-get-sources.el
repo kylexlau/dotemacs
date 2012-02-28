@@ -6,6 +6,9 @@
 	ruby-mode ruby-electric ruby-compilation flymake-ruby
 	rinari				; Rinari Is Not A Rails IDE
 	magit
+
+	markdown-mode			; jekyll blogging
+	go-mode 			; google go programming language
 	))
 
 (el-get 'wait)
