@@ -8,7 +8,8 @@
 	magit
 
 	markdown-mode			; jekyll blogging
-	go-mode 			; google go programming language
+	go-mode 			; google go
+	coffee-mode			; caffeescript
 	))
 
 (el-get 'wait)
