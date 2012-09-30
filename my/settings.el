@@ -1,4 +1,49 @@
-;; linum-mode
+;;; display
+;; frame title
+(when window-system
+  (setq frame-title-format '(buffer-file-name "%f" ("%b")))
+  ;; (tooltip-mode -1)
+  ;; (mouse-wheel-mode 1)
+  )
+
+;; transparency
+(modify-frame-parameters (selected-frame)
+			 '((alpha . 95)))
+
+;; minor modes
+(global-hl-line-mode 1)
+(global-font-lock-mode 1)
+(show-paren-mode 1)
+(transient-mark-mode 1)
+(auto-image-file-mode 1)
+(delete-selection-mode 1)
+
+; mode line
+(line-number-mode 1)
+(column-number-mode 1)
+(size-indication-mode 1)
+(display-time-mode 1)
+
+;; empty line
+(setq-default indicate-empty-lines t)
+
+;; trailing whitespace
+(setq-default show-trailing-whitespace t)
+; delete trailing whitespaces before save
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+;; variables
+(setq font-lock-maximum-decoration t
+      debug-on-error t
+      search-highlight t
+      query-replace-highlight t
+      use-dialog-box nil
+      visible-bell t
+      echo-keystrokes 0.1
+      inhibit-startup-message t
+      )
+
+;;; linum-mode
 (dolist (mode-hook '(
 		     c-mode-hook
 		     c++-mode-hook
@@ -10,32 +55,22 @@
 		     ))
   (add-hook mode-hook (lambda() (linum-mode 1))))
 
-;; custom file
-(setq custom-file (expand-file-name "custom.el"
-				    dotemacs-my-dir))
-(load custom-file)
-
-;; user info
+;;; user info
 (setq user-full-name "kyle x lau")
 (setq user-mail-address "kylexlau@gmail.com")
 
-;; encoding
+;;; encodings
 (prefer-coding-system 'utf-8)
 (set-language-environment 'utf-8)
-
 
 (add-hook 'message-mode-hook
 	  (lambda ()
             (setq fill-column 72)
             (turn-on-auto-fill)))
 
-;; fset and set-variable
-;(defalias 'yes-or-no-p 'y-or-n-p)
+;; y-or-n
 (fset 'yes-or-no-p 'y-or-n-p)
 (set-variable 'confirm-kill-emacs 'yes-or-no-p)
-
-;; delete trailing whitespaces before save
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; make emacs use the clipboard
 (setq x-select-enable-clipboard t)
