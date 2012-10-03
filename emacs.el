@@ -11,3 +11,4 @@
 (load "platforms")
 (load "auto-mode")
 (load "basic-modes")
+(load "pkgs")
