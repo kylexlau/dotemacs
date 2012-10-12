@@ -12,3 +12,4 @@
 (load "auto-mode")
 (load "basic-modes")
 (load "pkgs")
+(load "ruby-rails")
