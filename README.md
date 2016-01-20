@@ -1,17 +1,26 @@
-Intro
-======
+Introduction
+=============
 
-This is my Emacs configuration files.
+Didn't use Emacs or write codes for quite some years.  I want to write
+some codes with Emacs again.  Rewriting my Emacs configuration files
+is he first thing to do.
 
-I'm using Emacs 24's built-in package.el as elisp package manager.
+Configrations
+============
+
+- Setings Fonts
+- UI: Hide Toolbar
 
 Packages
-------------
+========
 
-Some packages I installed and used often:
+- MELPA repository: (http://melpa.org/#/getting-started)
+- markdown-mode
 
-* inf-ruby
-* ruby-electric
-* textmate
-* markdown-mode
-* puppet-mode
+Reference
+=========
+
+- [EmacsWiki](http://www.emacswiki.org/)
+- [MELPA](http://melpa.org/)
+- [折腾 Emacs](http://zhuoqiang.me/torture-emacs.html)
+- [chinese-fonts-setup](https://github.com/tumashu/chinese-fonts-setup)
