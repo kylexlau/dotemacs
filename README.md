@@ -7,8 +7,9 @@ is he first thing to do.
 
 Configrations
 ============
-
-- Setings Fonts
+- Setting melpa packages repository
+- Setting Fonts
+- Backup files to .emacs.d directory
 - UI: Hide Toolbar
 
 Packages
@@ -22,5 +23,8 @@ Reference
 
 - [EmacsWiki](http://www.emacswiki.org/)
 - [MELPA](http://melpa.org/)
+- [melpa github](https://github.com/milkypostman/melpa)
 - [折腾 Emacs](http://zhuoqiang.me/torture-emacs.html)
+- [一年成为Emacs高手](https://github.com/redguardtoo/mastering-emacs-in-one-year-guide/blob/master/guide-zh.org)
 - [chinese-fonts-setup](https://github.com/tumashu/chinese-fonts-setup)
+
