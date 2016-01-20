@@ -4,6 +4,12 @@
              '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
 
+;;; setting load-path
+(add-to-list 'load-path
+	     (concat
+	      (file-name-directory (or (buffer-file-name) load-file-name))
+	      "packages"))
+
 ;;; Font setting
 ;; English Font
 (set-face-attribute 'default nil :font "Consolas 13")
@@ -32,3 +38,10 @@
 
 ;;; UI setting
 (tool-bar-mode -1)
+;; y-or-n
+(fset 'yes-or-no-p 'y-or-n-p)
+(set-variable 'confirm-kill-emacs 'yes-or-no-p)
+
+;;; Loading packages
+(load "start-po")
+
