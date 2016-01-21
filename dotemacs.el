@@ -38,6 +38,7 @@
 
 ;;; UI setting
 (tool-bar-mode -1)
+(ido-mode 1)
 ;; y-or-n
 (fset 'yes-or-no-p 'y-or-n-p)
 (set-variable 'confirm-kill-emacs 'yes-or-no-p)
