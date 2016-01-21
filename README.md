@@ -5,6 +5,10 @@ Didn't use Emacs or write codes for quite some years.  I want to write
 some codes with Emacs again.  Rewriting my Emacs configuration files
 is he first thing to do.
 
+Add a line like this on .emacs file:
+
+	(load "/path/to/dotemacs.el")
+
 Configrations
 ============
 - Setting melpa packages repository
