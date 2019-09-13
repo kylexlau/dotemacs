@@ -2,8 +2,7 @@
 (require 'dired-x)
 (setq dired-omit-files
       (concat dired-omit-files "\\|^\\..+$"))
-(dired-omit-mode t)
-
+(add-hook 'dired-mode-hook (lambda () (dired-omit-mode)))
 
 ;; ido
 (require 'ido)

@@ -2,13 +2,20 @@
 ;; frame title
 (when window-system
   (setq frame-title-format '(buffer-file-name "%f" ("%b")))
+  (set-frame-size (selected-frame) 120 40)
+  (tool-bar-mode -1)
   ;; (tooltip-mode -1)
   ;; (mouse-wheel-mode 1)
   )
 
+(add-to-list 'default-frame-alist '(width . 120))
+(add-to-list 'default-frame-alist '(height . 40))
+
 ;; transparency
 (modify-frame-parameters (selected-frame)
 			 '((alpha . 95)))
+
+(when window-system (set-frame-size (selected-frame) 80 24))
 
 ;; minor modes
 (global-hl-line-mode 1)
@@ -56,17 +63,12 @@
   (add-hook mode-hook (lambda() (linum-mode 1))))
 
 ;;; user info
-(setq user-full-name "kyle x lau")
+(setq user-full-name "kyle lau")
 (setq user-mail-address "kylexlau@gmail.com")
 
 ;;; encodings
 (prefer-coding-system 'utf-8)
 (set-language-environment 'utf-8)
-
-(add-hook 'message-mode-hook
-	  (lambda ()
-            (setq fill-column 72)
-            (turn-on-auto-fill)))
 
 ;; y-or-n
 (fset 'yes-or-no-p 'y-or-n-p)

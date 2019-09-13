@@ -1,12 +1,11 @@
-(setq package-archives
-      '(("gnu" . "http://elpa.gnu.org/packages/")
-        ("marmalade" . "http://marmalade-repo.org/packages/")
-        ("Tromey" . "http://tromey.com/elpa/")))
+(require 'package)
+(add-to-list 'package-archives
+    '("melpa-stable" . "https://stable.melpa.org/packages/"))
 
 (package-initialize)
 
 (setq my-required-packages
-      '(inf-ruby))
+      '(markdown-mode))
 
 (dolist (package my-required-packages)
   (when (not (package-installed-p package))
