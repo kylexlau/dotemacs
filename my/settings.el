@@ -2,20 +2,16 @@
 ;; frame title
 (when window-system
   (setq frame-title-format '(buffer-file-name "%f" ("%b")))
-  (set-frame-size (selected-frame) 120 40)
   (tool-bar-mode -1)
   ;; (tooltip-mode -1)
   ;; (mouse-wheel-mode 1)
   )
-
+(when window-system (set-frame-size (selected-frame) 120 40))
 (add-to-list 'default-frame-alist '(width . 120))
 (add-to-list 'default-frame-alist '(height . 40))
 
 ;; transparency
-(modify-frame-parameters (selected-frame)
-			 '((alpha . 95)))
-
-(when window-system (set-frame-size (selected-frame) 80 24))
+(modify-frame-parameters (selected-frame) '((alpha . 95)))
 
 ;; minor modes
 (global-hl-line-mode 1)

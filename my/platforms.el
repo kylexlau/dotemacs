@@ -13,8 +13,7 @@
 
 ;; load platform config
 (cond
-  (ntp (load "nt"))
-  (linuxp (load "linux"))
-  (macosp (load "macosx"))
+  (ntp (load "my/nt"))
+  (linuxp (load "my/linux"))
+  (macosp (load "my/macosx"))
 )
-

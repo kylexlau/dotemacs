@@ -6,6 +6,8 @@
 ;(setq mac-command-modifier 'meta)
 ;(setq mac-option-modifier 'super)
 
+(set-fontset-font "fontset-default" 'han '("STHeiti"))
+
 (require 'dired)
 
 (define-key dired-mode-map "w"

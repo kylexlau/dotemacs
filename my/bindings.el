@@ -13,7 +13,6 @@
 ;; completion
 (global-set-key (kbd "C-=") 'hippie-expand)
 
-
 ;; outline mode
 (autoload 'org "org")
 (add-hook 'outline-mode-hook
