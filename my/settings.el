@@ -1,19 +1,26 @@
 ;;; display
-;; frame title
-(when window-system
-  (setq frame-title-format '(buffer-file-name "%f" ("%b")))
-  (tool-bar-mode -1)
-  ;; (tooltip-mode -1)
-  ;; (mouse-wheel-mode 1)
+
+(defun my-setup-window-system (&rest frame)
+  (when window-system
+    (setq frame-title-format '(buffer-file-name "%f" ("%b")))
+    (set-frame-size (selected-frame) 120 40)
+    (tool-bar-mode -1)
+    (tooltip-mode -1)
+    (mouse-wheel-mode 1)
+    )
   )
-(when window-system (set-frame-size (selected-frame) 120 40))
+
+(add-hook 'after-make-frame-functions 'my-setup-window-system t)
+
+;; frame ui
 (add-to-list 'default-frame-alist '(width . 120))
 (add-to-list 'default-frame-alist '(height . 40))
-
-;; transparency
-(modify-frame-parameters (selected-frame) '((alpha . 95)))
+(add-to-list 'default-frame-alist '(alpha . 90))
 
 ;; minor modes
+(tool-bar-mode -1)
+(tooltip-mode -1)
+(mouse-wheel-mode 1)
 (global-hl-line-mode 1)
 (global-font-lock-mode 1)
 (show-paren-mode 1)
@@ -32,7 +39,6 @@
 
 ;; trailing whitespace
 (setq-default show-trailing-whitespace t)
-; delete trailing whitespaces before save
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; variables
