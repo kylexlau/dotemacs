@@ -1,10 +1,10 @@
 ;; fullscreen shortcut
 (global-set-key (kbd "<C-s-268632070>") 'ns-toggle-fullscreen)
 
-;(set-fringe-style 0) ; for OS X linum-mode
+(set-fringe-style 0) ; for OS X linum-mode
 
-;(setq mac-command-modifier 'meta)
-;(setq mac-option-modifier 'super)
+(setq mac-command-modifier 'meta)
+(setq mac-option-modifier 'super)
 
 (set-fontset-font "fontset-default" 'han '("STHeiti"))
 
