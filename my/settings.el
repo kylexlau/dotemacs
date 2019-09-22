@@ -90,6 +90,8 @@
  kept-old-versions 2
  version-control t)
 
+(setq create-lockfiles nil)
+
 (setq emacs-temporary-file-directory
       (expand-file-name "~/.emacs.d/tmp"))
 (setq backup-directory-alist

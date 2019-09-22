@@ -10,3 +10,4 @@
 (load "my/basic-modes")
 (load "my/pkgs")
 (load "my/lang/md")
+(load "my/lang/golang")
